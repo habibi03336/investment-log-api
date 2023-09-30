@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of = "stockPurchaseId")
-public class StockPurchaseEntity {
+public class StockPurchaseRecordEntity {
     private long stockPurchaseId;
     private long storyId;
     private long userId;
