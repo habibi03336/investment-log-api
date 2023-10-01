@@ -26,15 +26,6 @@ public class StockSellRecordControllerTest {
     }
 
     @Test
-    public void readStockSellRecordsOfCertainStock() throws Exception {
-        mockMvc.perform(get("/api/stock-sell-records?stock-code=000660")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaTypes.HAL_JSON)
-                )
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void readStockSellRecordsBetweenPeriods() throws Exception {
         mockMvc.perform(get("/api/stock-sell-records?start-period=20230911&end-period=20230930")
                         .contentType(MediaType.APPLICATION_JSON)

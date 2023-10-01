@@ -16,11 +16,6 @@ public class StockSellRecordController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(params = { "stock-code" })
-    public ResponseEntity readStockSellRecordsOfCertainStock(@RequestParam("stock-code") String stockCode){
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping(params = { "start-period", "end-period" })
     public ResponseEntity readStockSellRecordsBetweenPeriods(@RequestParam("start-period") String startPeriod, @RequestParam("end-period") String endPeriod){
         return ResponseEntity.ok().build();

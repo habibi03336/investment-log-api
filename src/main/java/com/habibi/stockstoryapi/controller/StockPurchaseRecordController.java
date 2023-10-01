@@ -11,11 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value="/api/stock-purchase-records", produces = MediaTypes.HAL_JSON_VALUE)
 public class StockPurchaseRecordController {
 
-    @GetMapping(params = { "stock-code" })
-    public ResponseEntity readStockPurchaseRecordsOfCertainStock(@RequestParam("stock-code") String stockCode){
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping(params = { "start-period", "end-period"})
     public ResponseEntity readStockPurchaseRecordsBetweenPeriods(@RequestParam("start-period") String startPeriod, @RequestParam("end-period") String endPeriod){
         return ResponseEntity.ok().build();

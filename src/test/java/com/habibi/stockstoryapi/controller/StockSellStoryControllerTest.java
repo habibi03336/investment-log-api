@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,6 +22,15 @@ public class StockSellStoryControllerTest {
     ObjectMapper objectMapper;
     @Autowired
     MockMvc mockMvc;
+
+    @Test
+    public void readStockSellRecordsOfCertainStock() throws Exception {
+        mockMvc.perform(get("/api/stock-sell-stories?stock-code=000660")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON)
+                )
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void createStockSellStory() throws Exception {
