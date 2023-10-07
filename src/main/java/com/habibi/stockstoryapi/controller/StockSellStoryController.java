@@ -1,6 +1,6 @@
 package com.habibi.stockstoryapi.controller;
 
-import com.habibi.stockstoryapi.dto.CreateStockStoryDto;
+import com.habibi.stockstoryapi.dto.StockStoryDto;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ public class StockSellStoryController {
     }
 
     @PostMapping
-    public ResponseEntity createStockSellStory(@RequestBody CreateStockStoryDto createStockSellStoryDto){
+    public ResponseEntity createStockSellStory(@RequestBody StockStoryDto createStockSellStoryDto){
         URI createdUri = linkTo(StockSellStoryController.class).slash("{id}").toUri();
         return ResponseEntity.created(createdUri).build();
     }

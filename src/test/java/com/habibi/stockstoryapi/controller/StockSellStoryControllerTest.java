@@ -1,7 +1,7 @@
 package com.habibi.stockstoryapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.habibi.stockstoryapi.dto.CreateStockStoryDto;
+import com.habibi.stockstoryapi.dto.StockStoryDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -34,7 +34,7 @@ public class StockSellStoryControllerTest {
 
     @Test
     public void createStockSellStory() throws Exception {
-        CreateStockStoryDto dto = CreateStockStoryDto.builder()
+        StockStoryDto dto = StockStoryDto.builder()
                 .stockCode("035720")
                 .stockPrices(new int[]{43950, 44000, 43900})
                 .dt(LocalDateTime.of(2023, 10, 1, 15, 00))
