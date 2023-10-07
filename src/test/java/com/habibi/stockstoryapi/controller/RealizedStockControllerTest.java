@@ -11,14 +11,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-public class StockSellRecordControllerTest {
-
+public class RealizedStockControllerTest {
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    public void readStockSellRecordsBetweenPeriods() throws Exception {
-        mockMvc.perform(get("/api/stock-sell-records?start-period=20230911&end-period=20230930")
+    public void readStockSellRecords() throws Exception {
+        mockMvc.perform(get("/api/realized-stocks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                 )
