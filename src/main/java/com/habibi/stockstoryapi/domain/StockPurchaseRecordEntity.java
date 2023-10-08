@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of = "stockPurchaseId")
@@ -16,5 +17,5 @@ public class StockPurchaseRecordEntity {
     private long userId;
     private String stockCode;
     private long purchasePrice;
-    private LocalDateTime purchaseDt;
+    private LocalDate purchaseDt;
 }

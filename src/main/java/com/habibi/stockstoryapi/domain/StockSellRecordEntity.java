@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of = "stockSellId")
@@ -17,5 +18,5 @@ public class StockSellRecordEntity {
     private String stockCode;
     private long avgPurchasePrice;
     private long sellPrice;
-    private LocalDateTime sellDt;
+    private LocalDate sellDt;
 }
