@@ -8,6 +8,6 @@ import java.util.List;
 public interface StockStoryService {
     CreateStatusDto createPurchaseStory(StockPositionStoryDto stockPositionStoryDto);
     CreateStatusDto createSellStory(StockPositionStoryDto stockPositionStoryDto);
-    List<StockPositionStoryDto> readPurchaseStoryOfCertainStock(String stockCode);
-    List<StockPositionStoryDto> readSellStoryOfCertainStock(String stockCode);
+    List<StockPositionStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode);
+    List<StockPositionStoryDto> readStockShortPositionStoryOfCertainStock(String stockCode);
 }
