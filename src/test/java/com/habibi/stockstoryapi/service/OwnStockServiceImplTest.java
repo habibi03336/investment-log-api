@@ -29,7 +29,7 @@ public class OwnStockServiceImplTest {
         ownStockService = null;
     }
     @Test
-    public void testReturnEmptyListWhenNoOwnStock(){
+    public void returnEmptyListWhenNoOwnStock(){
         // given
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
         when(stockPurchaseRecordRepository.findAll())
@@ -47,7 +47,7 @@ public class OwnStockServiceImplTest {
     }
 
     @Test
-    public void testOwnStockResultAccuracy(){
+    public void ownStockResultAccuracy(){
         // given
         String stockCode1 = "000660";
         String stockCode2 = "066570";
@@ -130,7 +130,7 @@ public class OwnStockServiceImplTest {
     }
 
     @Test
-    public void testManyKindsOfOwnStocksAtSomePoint(){
+    public void ownStocksAtSomePointAccuracy(){
         // given
         String stockCode1 = "000660";
         String stockCode2 = "066570";
