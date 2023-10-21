@@ -16,17 +16,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-public class StockPurchaseStoryControllerTest {
+public class StockShortPositionStoryControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    public void readStockPurchaseRecordsOfCertainStock() throws Exception {
-        mockMvc.perform(get("/api/stock-purchase-stories?stock-code=000660")
+    public void readStockShortPositionStoriesOfCertainStock() throws Exception {
+        mockMvc.perform(get("/api/stock-short-position-stories?stock-code=000660")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                 )
@@ -34,15 +33,15 @@ public class StockPurchaseStoryControllerTest {
     }
 
     @Test
-    public void createStockPurchaseStory() throws Exception {
+    public void createStockShortPositionStory() throws Exception {
         StockPositionStoryDto dto = StockPositionStoryDto.builder()
-                .stockCode("105560")
+                .stockCode("035720")
+                .stockPrices(new int[]{43950, 44000, 43900})
                 .dt(LocalDateTime.of(2023, 10, 1, 15, 00))
-                .stockPrices(new int[]{55300, 55100, 56000})
-                .story("PBR이 지나치게 낮아져서 오를 여지가 있다고 생각함.")
+                .story("실적이 안 좋고, 개선 여지가 크게 보이지 않아 매도")
                 .build();
 
-        mockMvc.perform(post("/api/stock-purchase-stories")
+        mockMvc.perform(post("/api/stock-short-position-stories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                         .content(objectMapper.writeValueAsString(dto))

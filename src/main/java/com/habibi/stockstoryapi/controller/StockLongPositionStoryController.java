@@ -11,17 +11,16 @@ import java.net.URI;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Controller
-@RequestMapping(value="/api/stock-sell-stories", produces = MediaTypes.HAL_JSON_VALUE)
-public class StockSellStoryController {
+@RequestMapping(value="/api/stock-long-position-stories", produces = MediaTypes.HAL_JSON_VALUE)
+public class StockLongPositionStoryController {
 
     @GetMapping(params = { "stock-code" })
-    public ResponseEntity readStockSellStoriesOfCertainStock(@RequestParam("stock-code") String stockCode){
+    public ResponseEntity readStockLongPositionStoriesOfCertainStock(@RequestParam("stock-code") String stockCode){
         return ResponseEntity.ok().build();
     }
-
     @PostMapping
-    public ResponseEntity createStockSellStory(@RequestBody StockPositionStoryDto createStockSellStoryDto){
-        URI createdUri = linkTo(StockSellStoryController.class).slash("{id}").toUri();
+    public ResponseEntity createStockLongPositionStory(@RequestBody StockPositionStoryDto createStockPurchaseStoryDto){
+        URI createdUri = linkTo(StockLongPositionStoryController.class).slash("{id}").toUri();
         return ResponseEntity.created(createdUri).build();
     }
 }
