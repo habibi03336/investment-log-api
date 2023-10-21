@@ -9,9 +9,10 @@ import java.time.LocalDateTime;
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of = "storyId")
 @Entity
-public class StoryEntity {
+public class StockPositionStoryEntity {
     @Id @GeneratedValue
     private long storyId;
+    private String positionType;
     private int userId;
     private LocalDateTime creationDt;
     private String content;
