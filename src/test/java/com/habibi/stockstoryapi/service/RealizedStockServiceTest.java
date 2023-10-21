@@ -2,7 +2,9 @@ package com.habibi.stockstoryapi.service;
 
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
 import com.habibi.stockstoryapi.dto.RealizedStockDto;
+import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.JUnitException;
 
@@ -16,14 +18,20 @@ import static org.mockito.Mockito.when;
 
 public class RealizedStockServiceTest {
 
+    private StockSellRecordRepository stockSellRecordRepository;
+    private RealizedStockService realizedStockService;
+    @BeforeEach
+    void setUp() {
+        stockSellRecordRepository = mock(StockSellRecordRepository.class);
+        realizedStockService = null;
+    }
+
     @Test
-    public void testReturnEmptyListWhenNoRealizedStock(){
+    public void returnEmptyListWhenNoRealizedStock(){
         //given
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
-        RealizedStockService realizedStockService = null;
 
         // when
         List<RealizedStockDto> realizedStockDtos = realizedStockService.readRealizedStocks();
@@ -34,53 +42,7 @@ public class RealizedStockServiceTest {
     }
 
     @Test
-    public void testResultAccuracy(){
-        //given
-        String stockCode = "035420";
-        List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
-        stockSellRecordEntities.add(
-                StockSellRecordEntity.builder()
-                        .sellDt(LocalDate.of(2023,10,6))
-                        .stockCode(stockCode)
-                        .sellPrice(65000)
-                        .avgPurchasePrice(42000)
-                        .build()
-        );
-        stockSellRecordEntities.add(
-                StockSellRecordEntity.builder()
-                        .sellDt(LocalDate.of(2023,10,13))
-                        .stockCode(stockCode)
-                        .sellPrice(80000)
-                        .avgPurchasePrice(42000)
-                        .build()
-        );
-        stockSellRecordEntities.add(
-                StockSellRecordEntity.builder()
-                        .sellDt(LocalDate.of(2023,10,20))
-                        .stockCode(stockCode)
-                        .sellPrice(35000)
-                        .avgPurchasePrice(82300)
-                        .build()
-        );
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
-        when(stockSellRecordRepository.findAll())
-                .thenReturn(stockSellRecordEntities);
-        RealizedStockService realizedStockService = null;
-
-        // when
-        List<RealizedStockDto> realizedStockDtos = realizedStockService.readRealizedStocks();
-
-        // then
-        assertThat(realizedStockDtos.size()).isEqualTo(0);
-        RealizedStockDto realizedStockDto = realizedStockDtos.get(0);
-        assertThat(realizedStockDto.getStockCode()).isEqualTo(stockCode);
-        assertThat(realizedStockDto.getStockCount()).isEqualTo(3);
-        assertThat(realizedStockDto.getAveragePurchasePrice()).isEqualTo((42000+42000+82300)/3);
-        assertThat(realizedStockDto.getAverageSellPrice()).isEqualTo((65000+80000+35000)/3);
-    }
-
-    @Test
-    public void testManyStockKindsResultAccuracy(){
+    public void realizedStocksResultAccuracy(){
         //given
         String stockCode1 = "035420";
         String stockCode2 = "035720";
@@ -125,10 +87,8 @@ public class RealizedStockServiceTest {
                         .avgPurchasePrice(112000)
                         .build()
         );
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
-        RealizedStockService realizedStockService = null;
 
         // when
         List<RealizedStockDto> realizedStockDtos = realizedStockService.readRealizedStocks();
