@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class StockStoryDto {
+public class StockPositionStoryDto {
     private String stockCode;
     private int[] stockPrices;
     private LocalDateTime dt;

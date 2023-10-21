@@ -2,11 +2,11 @@ package com.habibi.stockstoryapi.service;
 
 import com.habibi.stockstoryapi.domain.StockPurchaseRecordEntity;
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
-import com.habibi.stockstoryapi.domain.StoryEntity;
-import com.habibi.stockstoryapi.dto.StockStoryDto;
+import com.habibi.stockstoryapi.domain.StockPositionStoryEntity;
+import com.habibi.stockstoryapi.dto.StockPositionStoryDto;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
-import com.habibi.stockstoryapi.repository.StoryRepository;
+import com.habibi.stockstoryapi.repository.StockPositionStoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,12 +21,12 @@ import static org.mockito.Mockito.when;
 
 public class StockStoryServiceTest {
     private StockStoryService stockStoryService;
-    private StoryRepository storyRepository;
+    private StockPositionStoryRepository stockPositionStoryRepository;
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
     @BeforeEach
     void setUp() {
-        storyRepository = Mockito.mock(StoryRepository.class);
+        stockPositionStoryRepository = Mockito.mock(StockPositionStoryRepository.class);
         stockPurchaseRecordRepository = Mockito.mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = Mockito.mock(StockSellRecordRepository.class);
         stockStoryService = null;
@@ -54,9 +54,9 @@ public class StockStoryServiceTest {
         String story = "Naver is great company";
         LocalDateTime creationDt = LocalDateTime.of(2023, 10, 21, 0, 0, 0);
         when(stockPurchaseRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockPurchaseRecordEntities);
-        when(storyRepository.findById(storyId)).thenReturn(
+        when(stockPositionStoryRepository.findById(storyId)).thenReturn(
                 Optional.ofNullable(
-                        StoryEntity.builder()
+                        StockPositionStoryEntity.builder()
                                 .storyId(1)
                                 .content(story)
                                 .creationDt(creationDt)
@@ -65,17 +65,17 @@ public class StockStoryServiceTest {
         );
 
         // when
-        List<StockStoryDto> stockStoryDtos = stockStoryService.readPurchaseStoryOfCertainStock(stockCode);
+        List<StockPositionStoryDto> stockPositionStoryDtos = stockStoryService.readPurchaseStoryOfCertainStock(stockCode);
 
         // then
-        assertThat(stockStoryDtos.size()).isEqualTo(1);
-        StockStoryDto stockStoryDto = stockStoryDtos.get(0);
-        assertThat(stockStoryDto.getStockCode()).isEqualTo(stockCode);
-        assertThat(stockStoryDto.getStockPrices().length).isEqualTo(2);
-        assertThat(stockStoryDto.getStockPrices()).contains(50000);
-        assertThat(stockStoryDto.getStockPrices()).contains(50100);
-        assertThat(stockStoryDto.getStory()).isEqualTo(story);
-        assertThat(stockStoryDto.getDt()).isEqualTo(creationDt);
+        assertThat(stockPositionStoryDtos.size()).isEqualTo(1);
+        StockPositionStoryDto stockPositionStoryDto = stockPositionStoryDtos.get(0);
+        assertThat(stockPositionStoryDto.getStockCode()).isEqualTo(stockCode);
+        assertThat(stockPositionStoryDto.getStockPrices().length).isEqualTo(2);
+        assertThat(stockPositionStoryDto.getStockPrices()).contains(50000);
+        assertThat(stockPositionStoryDto.getStockPrices()).contains(50100);
+        assertThat(stockPositionStoryDto.getStory()).isEqualTo(story);
+        assertThat(stockPositionStoryDto.getDt()).isEqualTo(creationDt);
     }
     @Test
     public void testReadSellStoryOfCertainStock(){
@@ -100,9 +100,9 @@ public class StockStoryServiceTest {
         String story = "IT market is too much hyped";
         LocalDateTime creationDt = LocalDateTime.of(2023, 10, 21, 0, 0, 0);
         when(stockSellRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockSellRecordEntities);
-        when(storyRepository.findById(storyId)).thenReturn(
+        when(stockPositionStoryRepository.findById(storyId)).thenReturn(
                 Optional.ofNullable(
-                        StoryEntity.builder()
+                        StockPositionStoryEntity.builder()
                                 .storyId(1)
                                 .content(story)
                                 .creationDt(creationDt)
@@ -111,16 +111,16 @@ public class StockStoryServiceTest {
         );
 
         // when
-        List<StockStoryDto> stockStoryDtos = stockStoryService.readSellStoryOfCertainStock(stockCode);
+        List<StockPositionStoryDto> stockPositionStoryDtos = stockStoryService.readSellStoryOfCertainStock(stockCode);
 
         // then
-        assertThat(stockStoryDtos.size()).isEqualTo(1);
-        StockStoryDto stockStoryDto = stockStoryDtos.get(0);
-        assertThat(stockStoryDto.getStockCode()).isEqualTo(stockCode);
-        assertThat(stockStoryDto.getStockPrices().length).isEqualTo(2);
-        assertThat(stockStoryDto.getStockPrices()).contains(60000);
-        assertThat(stockStoryDto.getStockPrices()).contains(60100);
-        assertThat(stockStoryDto.getStory()).isEqualTo(story);
-        assertThat(stockStoryDto.getDt()).isEqualTo(creationDt);
+        assertThat(stockPositionStoryDtos.size()).isEqualTo(1);
+        StockPositionStoryDto stockPositionStoryDto = stockPositionStoryDtos.get(0);
+        assertThat(stockPositionStoryDto.getStockCode()).isEqualTo(stockCode);
+        assertThat(stockPositionStoryDto.getStockPrices().length).isEqualTo(2);
+        assertThat(stockPositionStoryDto.getStockPrices()).contains(60000);
+        assertThat(stockPositionStoryDto.getStockPrices()).contains(60100);
+        assertThat(stockPositionStoryDto.getStory()).isEqualTo(story);
+        assertThat(stockPositionStoryDto.getDt()).isEqualTo(creationDt);
     }
 }
