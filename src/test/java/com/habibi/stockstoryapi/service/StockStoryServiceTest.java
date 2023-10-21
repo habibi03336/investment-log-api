@@ -51,7 +51,7 @@ public class StockStoryServiceTest {
                 .storyId(storyId1)
                 .build()
         );
-        long storyId2 = 1;
+        long storyId2 = 2;
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
                 .stockCode(stockCode)
