@@ -14,8 +14,8 @@ public class StockPurchaseRecordEntity {
     @Id @GeneratedValue
     private long stockPurchaseId;
     private long storyId;
-    private long userId;
+    private int userId;
     private String stockCode;
-    private long purchasePrice;
+    private int purchasePrice;
     private LocalDate purchaseDt;
 }

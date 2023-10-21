@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class StoryEntity {
     @Id @GeneratedValue
     private long storyId;
-    private long userId;
+    private int userId;
     private LocalDateTime creationDt;
     private String content;
 }

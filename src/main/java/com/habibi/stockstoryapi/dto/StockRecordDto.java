@@ -11,5 +11,5 @@ import java.time.LocalDate;
 public class StockRecordDto {
     private String stockCode;
     private LocalDate dt;
-    private String stockPrice;
+    private Integer stockPrice;
 }

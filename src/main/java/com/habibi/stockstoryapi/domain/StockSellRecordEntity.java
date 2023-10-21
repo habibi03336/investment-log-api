@@ -14,9 +14,9 @@ public class StockSellRecordEntity {
     @Id @GeneratedValue
     private long stockSellId;
     private long storyId;
-    private long userId;
+    private int userId;
     private String stockCode;
-    private long avgPurchasePrice;
-    private long sellPrice;
+    private int avgPurchasePrice;
+    private int sellPrice;
     private LocalDate sellDt;
 }
