@@ -2,7 +2,6 @@ package com.habibi.stockstoryapi.service;
 
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
 import com.habibi.stockstoryapi.dto.RealizedStockDto;
-import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
