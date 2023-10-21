@@ -5,6 +5,7 @@ import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
 import com.habibi.stockstoryapi.dto.OwnStockDto;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.JUnitException;
 
@@ -17,19 +18,24 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class OwnStockServiceImplTest {
+    private StockPurchaseRecordRepository stockPurchaseRecordRepository;
+    private StockSellRecordRepository stockSellRecordRepository;
+    private OwnStockService ownStockService;
+    @BeforeEach
+    void setUp() {
+        stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
+        stockSellRecordRepository = mock(StockSellRecordRepository.class);
+        ownStockService = null;
+    }
     @Test
-    public void testReturnSize0ListWhenNoOwnStock(){
+    public void testReturnEmptyListWhenNoOwnStock(){
         // given
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
-        StockPurchaseRecordRepository stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         when(stockPurchaseRecordRepository.findAll())
                 .thenReturn(stockPurchaseRecordEntities);
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
-
-        OwnStockService ownStockService = null;
 
         // when
         List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks();
@@ -51,15 +57,11 @@ public class OwnStockServiceImplTest {
                         .purchasePrice(45000)
                         .build()
         );
-        StockPurchaseRecordRepository stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         when(stockPurchaseRecordRepository.findAll())
                 .thenReturn(stockPurchaseRecordEntities);
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
-
-        OwnStockService ownStockService = null;
 
         // when
         List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks();
@@ -98,7 +100,6 @@ public class OwnStockServiceImplTest {
                         .purchasePrice(58000)
                         .build()
         );
-        StockPurchaseRecordRepository stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         when(stockPurchaseRecordRepository.findAll())
                 .thenReturn(stockPurchaseRecordEntities);
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
@@ -109,11 +110,8 @@ public class OwnStockServiceImplTest {
                         .sellPrice(30000)
                         .build()
         );
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
-
-        OwnStockService ownStockService = null;
 
         // when
         List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks();
@@ -152,7 +150,6 @@ public class OwnStockServiceImplTest {
                         .purchasePrice(58000)
                         .build()
         );
-        StockPurchaseRecordRepository stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         when(stockPurchaseRecordRepository.findAll())
                 .thenReturn(stockPurchaseRecordEntities);
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
@@ -177,11 +174,8 @@ public class OwnStockServiceImplTest {
                         .sellPrice(55000)
                         .build()
         );
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
-
-        OwnStockService ownStockService = null;
 
         // when & expected 1
         // should be no own stocks, because it returns own stocks at the start of the day.
@@ -251,7 +245,6 @@ public class OwnStockServiceImplTest {
                         .purchasePrice(70000)
                         .build()
         );
-        StockPurchaseRecordRepository stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         when(stockPurchaseRecordRepository.findAll())
                 .thenReturn(stockPurchaseRecordEntities);
 
@@ -270,12 +263,9 @@ public class OwnStockServiceImplTest {
                         .sellPrice(68000)
                         .build()
         );
-
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
 
-        OwnStockService ownStockService = null;
 
         // when
         List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks();
@@ -338,7 +328,6 @@ public class OwnStockServiceImplTest {
                         .purchasePrice(70000)
                         .build()
         );
-        StockPurchaseRecordRepository stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         when(stockPurchaseRecordRepository.findAll())
                 .thenReturn(stockPurchaseRecordEntities);
 
@@ -352,11 +341,8 @@ public class OwnStockServiceImplTest {
                         .build()
         );
 
-        StockSellRecordRepository stockSellRecordRepository = mock(StockSellRecordRepository.class);
         when(stockSellRecordRepository.findAll())
                 .thenReturn(stockSellRecordEntities);
-
-        OwnStockService ownStockService = null;
 
         // when & expected 1
         List<OwnStockDto> ownStockDtos1 = ownStockService.readOwnStocksAtSomePoint(LocalDate.of(2023, 10, 8));
