@@ -17,7 +17,7 @@ class StockPurchaseRecordEntityTest {
     public void javaBean(){
         // Given
         String stockCode = "000660";
-        long purchasePrice = 45_600;
+        int purchasePrice = 45_600;
 
         // When
         StockPurchaseRecordEntity stockPurchaseRecordEntity = new StockPurchaseRecordEntity();

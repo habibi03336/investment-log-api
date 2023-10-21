@@ -17,8 +17,8 @@ class StockSellRecordEntityTest {
     public void javaBean(){
         // Given
         String stockCode = "000660";
-        long avgPurchasePrice = 45_600;
-        long sellPrice = 892_220;
+        int avgPurchasePrice = 45_600;
+        int sellPrice = 892_220;
 
         // When
         StockSellRecordEntity stockSellRecordEntity = new StockSellRecordEntity();
