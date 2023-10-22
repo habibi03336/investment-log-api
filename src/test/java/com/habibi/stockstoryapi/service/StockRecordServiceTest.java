@@ -27,7 +27,7 @@ public class StockRecordServiceTest {
     void setUp() {
         stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = mock(StockSellRecordRepository.class);
-        stockRecordService = null;
+        stockRecordService = new StockRecordServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository);
     }
 
     @Test
