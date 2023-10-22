@@ -22,7 +22,7 @@ public class RealizedStockServiceTest {
     @BeforeEach
     void setUp() {
         stockSellRecordRepository = mock(StockSellRecordRepository.class);
-        realizedStockService = null;
+        realizedStockService = new RealizedStockServiceImpl(stockSellRecordRepository);
     }
 
     @Test
