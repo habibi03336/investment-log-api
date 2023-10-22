@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -138,22 +137,18 @@ public class StockPositionStoryServiceTest {
         );
         when(stockSellRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockSellRecordEntities);
         String story1 = "IT market is too much hyped";
-        when(stockPositionStoryRepository.findById(storyId1)).thenReturn(
-                Optional.ofNullable(
-                        StockPositionStoryEntity.builder()
-                                .storyId(storyId1)
-                                .content(story1)
-                                .build()
-                )
+        when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
+                StockPositionStoryEntity.builder()
+                        .storyId(storyId1)
+                        .content(story1)
+                        .build()
         );
         String story2 = "IT market is way too much hyped";
-        when(stockPositionStoryRepository.findById(storyId2)).thenReturn(
-                Optional.ofNullable(
-                        StockPositionStoryEntity.builder()
-                                .storyId(storyId2)
-                                .content(story2)
-                                .build()
-                )
+        when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
+                StockPositionStoryEntity.builder()
+                        .storyId(storyId2)
+                        .content(story2)
+                        .build()
         );
 
         // when
