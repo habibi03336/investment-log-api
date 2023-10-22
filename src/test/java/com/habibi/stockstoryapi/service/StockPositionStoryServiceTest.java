@@ -19,8 +19,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class StockStoryServiceTest {
-    private StockStoryService stockStoryService;
+public class StockPositionStoryServiceTest {
+    private StockPositionStoryService stockPositionStoryService;
     private StockPositionStoryRepository stockPositionStoryRepository;
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
@@ -29,7 +29,7 @@ public class StockStoryServiceTest {
         stockPositionStoryRepository = Mockito.mock(StockPositionStoryRepository.class);
         stockPurchaseRecordRepository = Mockito.mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = Mockito.mock(StockSellRecordRepository.class);
-        stockStoryService = null;
+        stockPositionStoryService = null;
     }
     @Test
     public void readStockLongPositionStoryOfCertainStock(){
@@ -84,7 +84,7 @@ public class StockStoryServiceTest {
         );
 
         // when
-        List<StockPositionStoryDto> stockPositionStoryDtos = stockStoryService.readStockLongPositionStoryOfCertainStock(stockCode);
+        List<StockPositionStoryDto> stockPositionStoryDtos = stockPositionStoryService.readStockLongPositionStoryOfCertainStock(stockCode);
 
         // then
         assertThat(stockPositionStoryDtos.size()).isEqualTo(2);
@@ -159,7 +159,7 @@ public class StockStoryServiceTest {
         );
 
         // when
-        List<StockPositionStoryDto> stockPositionStoryDtos = stockStoryService.readStockShortPositionStoryOfCertainStock(stockCode);
+        List<StockPositionStoryDto> stockPositionStoryDtos = stockPositionStoryService.readStockShortPositionStoryOfCertainStock(stockCode);
 
         // then
         // latest one comes first
