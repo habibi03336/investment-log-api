@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class StockPositionStoryDto {
     private String stockCode;
     private int[] stockPrices;
-    private LocalDateTime dt;
+    private LocalDate dt;
     private String story;
 }

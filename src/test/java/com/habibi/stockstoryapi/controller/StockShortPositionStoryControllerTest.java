@@ -9,7 +9,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,7 +37,7 @@ public class StockShortPositionStoryControllerTest {
         StockPositionStoryDto dto = StockPositionStoryDto.builder()
                 .stockCode("035720")
                 .stockPrices(new int[]{43950, 44000, 43900})
-                .dt(LocalDateTime.of(2023, 10, 1, 15, 00))
+                .dt(LocalDate.of(2023, 10, 1))
                 .story("실적이 안 좋고, 개선 여지가 크게 보이지 않아 매도")
                 .build();
 

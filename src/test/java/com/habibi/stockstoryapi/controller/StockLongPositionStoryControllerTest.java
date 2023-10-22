@@ -9,7 +9,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,7 +37,6 @@ public class StockLongPositionStoryControllerTest {
     public void createStockLongPositionStory() throws Exception {
         StockPositionStoryDto dto = StockPositionStoryDto.builder()
                 .stockCode("105560")
-                .dt(LocalDateTime.of(2023, 10, 1, 15, 00))
                 .stockPrices(new int[]{55300, 55100, 56000})
                 .story("PBR이 지나치게 낮아져서 오를 여지가 있다고 생각함.")
                 .build();
