@@ -26,7 +26,7 @@ public class OwnStockServiceImplTest {
     void setUp() {
         stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = mock(StockSellRecordRepository.class);
-        ownStockService = null;
+        ownStockService = new OwnStockServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository);
     }
     @Test
     public void returnEmptyListWhenNoOwnStock(){
@@ -95,6 +95,7 @@ public class OwnStockServiceImplTest {
                 StockSellRecordEntity.builder()
                         .sellDt(LocalDate.of(2023,10,13))
                         .stockCode(stockCode1)
+                        .avgPurchasePrice((45000+52000)/2)
                         .sellPrice(30000)
                         .build()
         );
@@ -102,6 +103,7 @@ public class OwnStockServiceImplTest {
                 StockSellRecordEntity.builder()
                         .sellDt(LocalDate.of(2023,10,14))
                         .stockCode(stockCode2)
+                        .avgPurchasePrice((65000+67000+70000)/3)
                         .sellPrice(68000)
                         .build()
         );
