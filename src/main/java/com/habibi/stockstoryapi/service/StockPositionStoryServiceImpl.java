@@ -27,10 +27,69 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
         this.stockPositionStoryRepository = stockPositionStoryRepository;
     }
     @Override
-    public CreateStatusDto createLongPositionStory(StockPositionStoryDto stockPositionStoryDto) { return null; }
+    public CreateStatusDto createLongPositionStory(StockPositionStoryDto stockPositionStoryDto) {
+        String stockCode = stockPositionStoryDto.getStockCode();
+        int[] stockPrices = stockPositionStoryDto.getStockPrices();
+        LocalDate date = stockPositionStoryDto.getDt();
+        String story = stockPositionStoryDto.getStory();
+        StockPositionStoryEntity stockPositionStoryEntity = StockPositionStoryEntity
+                .builder()
+                .positionType("Long")
+                .story(story)
+                .build();
+        stockPositionStoryRepository.save(stockPositionStoryEntity);
+        Long storyId = stockPositionStoryEntity.getStoryId();
+        for(int price : stockPrices){
+            StockPurchaseRecordEntity stockPurchaseRecordEntity = StockPurchaseRecordEntity
+                    .builder()
+                    .storyId(storyId)
+                    .stockCode(stockCode)
+                    .purchaseDt(date)
+                    .purchasePrice(price)
+                    .build();
+            stockPurchaseRecordRepository.save(stockPurchaseRecordEntity);
+        }
+        return CreateStatusDto.builder().status(CreateStatusDto.Status.SUCCESS).build();
+    }
 
     @Override
-    public CreateStatusDto createShortPositionStory(StockPositionStoryDto stockPositionStoryDto) { return null; }
+    public CreateStatusDto createShortPositionStory(StockPositionStoryDto stockPositionStoryDto) {
+        String stockCode = stockPositionStoryDto.getStockCode();
+        int[] stockPrices = stockPositionStoryDto.getStockPrices();
+        LocalDate date = stockPositionStoryDto.getDt();
+        String story = stockPositionStoryDto.getStory();
+        StockPositionStoryEntity stockPositionStoryEntity = StockPositionStoryEntity
+                .builder()
+                .positionType("Short")
+                .story(story)
+                .build();
+        stockPositionStoryRepository.save(stockPositionStoryEntity);
+        Long storyId = stockPositionStoryEntity.getStoryId();
+        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByStockCode(stockCode);
+        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByStockCode(stockCode);
+        long[] countAndTotalPrices = new long[]{0, 0};
+        for(StockPurchaseRecordEntity stockPurchaseRecordEntity: stockPurchaseRecordEntities){
+            countAndTotalPrices[0] += 1;
+            countAndTotalPrices[1] += stockPurchaseRecordEntity.getPurchasePrice();
+        }
+        for(StockSellRecordEntity stockSellRecordEntity: stockSellRecordEntities){
+            countAndTotalPrices[0] -= 1;
+            countAndTotalPrices[1] -= stockSellRecordEntity.getAvgPurchasePrice();
+        }
+        int averagePurchasePrice = (int)(countAndTotalPrices[1]/countAndTotalPrices[0]);
+        for(int price : stockPrices){
+            StockSellRecordEntity stockSellRecordEntity = StockSellRecordEntity
+                    .builder()
+                    .storyId(storyId)
+                    .stockCode(stockCode)
+                    .sellDt(date)
+                    .avgPurchasePrice(averagePurchasePrice)
+                    .sellPrice(price)
+                    .build();
+            stockSellRecordRepository.save(stockSellRecordEntity);
+        }
+        return CreateStatusDto.builder().status(CreateStatusDto.Status.SUCCESS).build();
+    }
 
     @Override
     public List<StockPositionStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode) {
