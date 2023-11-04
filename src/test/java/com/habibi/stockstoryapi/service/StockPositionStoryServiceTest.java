@@ -3,6 +3,7 @@ package com.habibi.stockstoryapi.service;
 import com.habibi.stockstoryapi.domain.StockPurchaseRecordEntity;
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
 import com.habibi.stockstoryapi.domain.StockPositionStoryEntity;
+import com.habibi.stockstoryapi.dto.CreateStatusDto;
 import com.habibi.stockstoryapi.dto.StockPositionStoryDto;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 public class StockPositionStoryServiceTest {
@@ -171,5 +173,111 @@ public class StockPositionStoryServiceTest {
         assertThat(stockPositionStoryDtoOfStoryId1.getStockPrices()[0]).isEqualTo(60000);
         assertThat(stockPositionStoryDtoOfStoryId1.getStory()).isEqualTo(story1);
         assertThat(stockPositionStoryDtoOfStoryId1.getDt()).isEqualTo(stockSellDate1);
+    }
+
+    @Test
+    public void createStockLongPositionStory(){
+        // given
+        String stockCode = "373220";
+        int[] stockPrices = new int[] { 402000, 401000, 404000 };
+        LocalDate date = LocalDate.of(2023, 11, 3);
+        String story = "Battery industry will grow and LG energy solution is a leading company.";
+
+        StockPositionStoryDto stockPositionStoryDto = StockPositionStoryDto
+                .builder()
+                .stockCode(stockCode)
+                .stockPrices(stockPrices)
+                .dt(date)
+                .story(story)
+                .build();
+
+        //when
+        CreateStatusDto createStatusDto = stockPositionStoryService.createLongPositionStory(stockPositionStoryDto);
+        StockPositionStoryDto createdStockPositionStoryDto = stockPositionStoryService.readStockLongPositionStoryOfCertainStock(stockCode).get(0);
+
+        //then
+        assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);
+        assertThat(createdStockPositionStoryDto.getStockCode()).isEqualTo(stockCode);
+        assertThat(createdStockPositionStoryDto.getStockPrices()).contains(stockPrices);
+        assertThat(createdStockPositionStoryDto.getDt()).isEqualTo(date);
+        assertThat(createdStockPositionStoryDto.getStory()).isEqualTo(story);
+    }
+
+    @Test
+    public void createStockShortPositionStory(){
+        // given
+        String stockCode = "373220";
+        int[] longPositionStockPrices = new int[] { 402000, 401000, 404000 };
+        LocalDate longPositionDate = LocalDate.of(2023, 11, 3);
+        String longPositionStory = "Battery industry will grow and LG energy solution is a leading company.";
+
+        StockPositionStoryDto stockLongPositionStoryDto = StockPositionStoryDto
+                .builder()
+                .stockCode(stockCode)
+                .stockPrices(longPositionStockPrices)
+                .dt(longPositionDate)
+                .story(longPositionStory)
+                .build();
+
+        stockPositionStoryService.createLongPositionStory(stockLongPositionStoryDto);
+
+        int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
+        LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);
+        String shortPositionStory = "I would like to invest in semi conductor industry more";
+        StockPositionStoryDto stockShortPositionStoryDto = StockPositionStoryDto
+                .builder()
+                .stockCode(stockCode)
+                .stockPrices(shortPositionStockPrices)
+                .dt(shortPositionDate)
+                .story(shortPositionStory)
+                .build();
+
+        //when
+        CreateStatusDto createStatusDto = stockPositionStoryService.createShortPositionStory(stockShortPositionStoryDto);
+        StockPositionStoryDto createdStockPositionStoryDto = stockPositionStoryService.readStockShortPositionStoryOfCertainStock(stockCode).get(0);
+
+        //then
+        assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);
+        assertThat(createdStockPositionStoryDto.getStockCode()).isEqualTo(stockCode);
+        assertThat(createdStockPositionStoryDto.getStockPrices()).contains(shortPositionStockPrices);
+        assertThat(createdStockPositionStoryDto.getDt()).isEqualTo(shortPositionDate);
+        assertThat(createdStockPositionStoryDto.getStory()).isEqualTo(shortPositionStory);
+    }
+
+    @Test
+    public void createStockShortPositionStoryFailWhenMoreShortThanLong(){
+        // given
+        String stockCode = "373220";
+        int[] longPositionStockPrices = new int[] { 402000, 401000 };
+        LocalDate longPositionDate = LocalDate.of(2023, 11, 3);
+        String longPositionStory = "Battery industry will grow and LG energy solution is a leading company.";
+
+        StockPositionStoryDto stockLongPositionStoryDto = StockPositionStoryDto
+                .builder()
+                .stockCode(stockCode)
+                .stockPrices(longPositionStockPrices)
+                .dt(longPositionDate)
+                .story(longPositionStory)
+                .build();
+
+        stockPositionStoryService.createLongPositionStory(stockLongPositionStoryDto);
+
+        int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
+        LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);
+        String shortPositionStory = "I would like to invest in semi conductor industry more";
+        StockPositionStoryDto stockShortPositionStoryDto = StockPositionStoryDto
+                .builder()
+                .stockCode(stockCode)
+                .stockPrices(shortPositionStockPrices)
+                .dt(shortPositionDate)
+                .story(shortPositionStory)
+                .build();
+
+        //when
+        CreateStatusDto createStatusDto =
+            stockPositionStoryService.createShortPositionStory(stockShortPositionStoryDto);
+
+        //then
+        assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.FAIL);
     }
 }
