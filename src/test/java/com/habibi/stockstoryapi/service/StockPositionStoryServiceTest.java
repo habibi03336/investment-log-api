@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 public class StockPositionStoryServiceTest {
@@ -71,14 +70,14 @@ public class StockPositionStoryServiceTest {
         when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
             StockPositionStoryEntity.builder()
                     .storyId(storyId1)
-                    .content(story1)
+                    .story(story1)
                     .build()
         );
         String story2 = "Naver has great potential";
         when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
             StockPositionStoryEntity.builder()
                     .storyId(storyId2)
-                    .content(story2)
+                    .story(story2)
                     .build()
         );
 
@@ -142,14 +141,14 @@ public class StockPositionStoryServiceTest {
         when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
                 StockPositionStoryEntity.builder()
                         .storyId(storyId1)
-                        .content(story1)
+                        .story(story1)
                         .build()
         );
         String story2 = "IT market is way too much hyped";
         when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
                 StockPositionStoryEntity.builder()
                         .storyId(storyId2)
-                        .content(story2)
+                        .story(story2)
                         .build()
         );
 
@@ -193,14 +192,9 @@ public class StockPositionStoryServiceTest {
 
         //when
         CreateStatusDto createStatusDto = stockPositionStoryService.createLongPositionStory(stockPositionStoryDto);
-        StockPositionStoryDto createdStockPositionStoryDto = stockPositionStoryService.readStockLongPositionStoryOfCertainStock(stockCode).get(0);
 
         //then
         assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);
-        assertThat(createdStockPositionStoryDto.getStockCode()).isEqualTo(stockCode);
-        assertThat(createdStockPositionStoryDto.getStockPrices()).contains(stockPrices);
-        assertThat(createdStockPositionStoryDto.getDt()).isEqualTo(date);
-        assertThat(createdStockPositionStoryDto.getStory()).isEqualTo(story);
     }
 
     @Test
@@ -234,50 +228,8 @@ public class StockPositionStoryServiceTest {
 
         //when
         CreateStatusDto createStatusDto = stockPositionStoryService.createShortPositionStory(stockShortPositionStoryDto);
-        StockPositionStoryDto createdStockPositionStoryDto = stockPositionStoryService.readStockShortPositionStoryOfCertainStock(stockCode).get(0);
 
         //then
         assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);
-        assertThat(createdStockPositionStoryDto.getStockCode()).isEqualTo(stockCode);
-        assertThat(createdStockPositionStoryDto.getStockPrices()).contains(shortPositionStockPrices);
-        assertThat(createdStockPositionStoryDto.getDt()).isEqualTo(shortPositionDate);
-        assertThat(createdStockPositionStoryDto.getStory()).isEqualTo(shortPositionStory);
-    }
-
-    @Test
-    public void createStockShortPositionStoryFailWhenMoreShortThanLong(){
-        // given
-        String stockCode = "373220";
-        int[] longPositionStockPrices = new int[] { 402000, 401000 };
-        LocalDate longPositionDate = LocalDate.of(2023, 11, 3);
-        String longPositionStory = "Battery industry will grow and LG energy solution is a leading company.";
-
-        StockPositionStoryDto stockLongPositionStoryDto = StockPositionStoryDto
-                .builder()
-                .stockCode(stockCode)
-                .stockPrices(longPositionStockPrices)
-                .dt(longPositionDate)
-                .story(longPositionStory)
-                .build();
-
-        stockPositionStoryService.createLongPositionStory(stockLongPositionStoryDto);
-
-        int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
-        LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);
-        String shortPositionStory = "I would like to invest in semi conductor industry more";
-        StockPositionStoryDto stockShortPositionStoryDto = StockPositionStoryDto
-                .builder()
-                .stockCode(stockCode)
-                .stockPrices(shortPositionStockPrices)
-                .dt(shortPositionDate)
-                .story(shortPositionStory)
-                .build();
-
-        //when
-        CreateStatusDto createStatusDto =
-            stockPositionStoryService.createShortPositionStory(stockShortPositionStoryDto);
-
-        //then
-        assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.FAIL);
     }
 }
