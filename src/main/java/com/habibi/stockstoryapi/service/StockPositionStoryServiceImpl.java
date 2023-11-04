@@ -26,12 +26,12 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
         this.stockPositionStoryRepository = stockPositionStoryRepository;
     }
     @Override
-    public CreateStatusDto createPurchaseStory(StockPositionStoryDto stockPositionStoryDto) {
+    public CreateStatusDto createLongPositionStory(StockPositionStoryDto stockPositionStoryDto) {
         return null;
     }
 
     @Override
-    public CreateStatusDto createSellStory(StockPositionStoryDto stockPositionStoryDto) {
+    public CreateStatusDto createShortPositionStory(StockPositionStoryDto stockPositionStoryDto) {
         return null;
     }
 
