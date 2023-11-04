@@ -19,16 +19,16 @@ class StockPositionStoryEntityTest {
     @Test
     public void javaBean(){
         // Given
-        String content = "I think the semiconductor market will grow rapidly";
+        String story = "I think the semiconductor market will grow rapidly";
         LocalDateTime creationDt = LocalDateTime.of(LocalDate.of(2023,9, 26), LocalTime.of(22, 15, 0, 0));
 
         // When
         StockPositionStoryEntity stockPositionStoryEntity = new StockPositionStoryEntity();
-        stockPositionStoryEntity.setContent(content);
+        stockPositionStoryEntity.setStory(story);
         stockPositionStoryEntity.setCreationDt(creationDt);
 
         // Then
-        assertThat(stockPositionStoryEntity.getContent()).isEqualTo(content);
+        assertThat(stockPositionStoryEntity.getStory()).isEqualTo(story);
         assertThat(stockPositionStoryEntity.getCreationDt()).isEqualTo(creationDt);
     }
 }

@@ -9,6 +9,7 @@ import com.habibi.stockstoryapi.repository.StockPositionStoryRepository;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,14 +27,10 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
         this.stockPositionStoryRepository = stockPositionStoryRepository;
     }
     @Override
-    public CreateStatusDto createLongPositionStory(StockPositionStoryDto stockPositionStoryDto) {
-        return null;
-    }
+    public CreateStatusDto createLongPositionStory(StockPositionStoryDto stockPositionStoryDto) { return null; }
 
     @Override
-    public CreateStatusDto createShortPositionStory(StockPositionStoryDto stockPositionStoryDto) {
-        return null;
-    }
+    public CreateStatusDto createShortPositionStory(StockPositionStoryDto stockPositionStoryDto) { return null; }
 
     @Override
     public List<StockPositionStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode) {
@@ -65,7 +62,7 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
                                             .mapToInt(entity -> entity.getPurchasePrice())
                                             .toArray()
                             )
-                            .story(stockPositionStoryEntity.getContent())
+                            .story(stockPositionStoryEntity.getStory())
                             .build()
             );
         }
@@ -102,7 +99,7 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
                                             .mapToInt(entity -> entity.getSellPrice())
                                             .toArray()
                             )
-                            .story(stockPositionStoryEntity.getContent())
+                            .story(stockPositionStoryEntity.getStory())
                             .build()
             );
         }

@@ -15,5 +15,5 @@ public class StockPositionStoryEntity {
     private String positionType;
     private int userId;
     private LocalDateTime creationDt;
-    private String content;
+    private String story;
 }
