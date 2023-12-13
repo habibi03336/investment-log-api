@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class StockStoryDto {
+    private long storyId;
     private boolean isLong;
     private String stockCode;
     private int[] stockPrices;
