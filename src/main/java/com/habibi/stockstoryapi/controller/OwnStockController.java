@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(value="/api/own-stocks", produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value="/api/own-stock", produces = MediaTypes.HAL_JSON_VALUE)
 public class OwnStockController {
 
     @GetMapping

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(value="/api/stock-purchase-records", produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value="/api/stock-purchase-record", produces = MediaTypes.HAL_JSON_VALUE)
 public class StockPurchaseRecordController {
 
     @GetMapping(params = { "start-period", "end-period"})
