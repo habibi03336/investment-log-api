@@ -17,7 +17,7 @@ public class RealizedStockControllerTest {
 
     @Test
     public void readStockSellRecords() throws Exception {
-        mockMvc.perform(get("/api/realized-stocks")
+        mockMvc.perform(get("/api/realized-stock")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                 )

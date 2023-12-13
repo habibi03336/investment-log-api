@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-public class StockLongPositionStoryControllerTest {
+public class StockStoryControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
@@ -24,9 +24,10 @@ public class StockLongPositionStoryControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+
     @Test
-    public void readStockLongPositionStoriesOfCertainStock() throws Exception {
-        mockMvc.perform(get("/api/stock-long-position-stories?stock-code=000660")
+    public void readStockStoryById() throws Exception {
+        mockMvc.perform(get("/api/stock-story/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                 )
@@ -34,7 +35,16 @@ public class StockLongPositionStoryControllerTest {
     }
 
     @Test
-    public void createStockLongPositionStory() throws Exception {
+    public void readStockStoriesOfCertainStock() throws Exception {
+        mockMvc.perform(get("/api/stock-story?stock-code=000660")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON)
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createStockStory() throws Exception {
         StockPositionStoryDto dto = StockPositionStoryDto.builder()
                 .stockCode("105560")
                 .stockPrices(new int[]{55300, 55100, 56000})
@@ -48,4 +58,5 @@ public class StockLongPositionStoryControllerTest {
                 )
                 .andExpect(status().isCreated());
     }
+
 }
