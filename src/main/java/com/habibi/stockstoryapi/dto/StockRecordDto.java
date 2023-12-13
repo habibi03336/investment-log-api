@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class StockRecordDto {
+    private String stockName;
     private String stockCode;
     private LocalDate dt;
     private Integer stockPrice;

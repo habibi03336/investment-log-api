@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class RealizedStockDto {
+    private String stockName;
     private String stockCode;
     private Integer stockCount;
     private Integer averageSellPrice;

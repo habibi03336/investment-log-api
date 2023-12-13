@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class StockStoryDto {
     private long storyId;
     private boolean isLong;
+    private String stockName;
     private String stockCode;
     private int[] stockPrices;
     private LocalDate dt;
