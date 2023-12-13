@@ -16,4 +16,5 @@ public class StockStoryDto {
     private int[] stockPrices;
     private LocalDate dt;
     private String story;
+    private Integer averagePurchasePrice;
 }
