@@ -50,7 +50,7 @@ public class StockStoryControllerTest {
                 .story("PBR이 지나치게 낮아져서 오를 여지가 있다고 생각함.")
                 .build();
 
-        mockMvc.perform(post("/api/stock-long-position-stories")
+        mockMvc.perform(post("/api/stock-story")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                         .content(objectMapper.writeValueAsString(dto))

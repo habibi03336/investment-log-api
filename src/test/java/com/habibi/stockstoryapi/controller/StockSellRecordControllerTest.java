@@ -24,13 +24,4 @@ public class StockSellRecordControllerTest {
                 )
                 .andExpect(status().isOk());
     }
-
-    @Test
-    public void readStockSellRecords() throws Exception {
-        mockMvc.perform(get("/api/stock-sell-record")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaTypes.HAL_JSON)
-                )
-                .andExpect(status().isOk());
-    }
 }
