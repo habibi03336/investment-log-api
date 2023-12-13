@@ -1,15 +1,13 @@
 package com.habibi.stockstoryapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.habibi.stockstoryapi.dto.StockPositionStoryDto;
+import com.habibi.stockstoryapi.dto.StockStoryDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,7 +43,8 @@ public class StockStoryControllerTest {
 
     @Test
     public void createStockStory() throws Exception {
-        StockPositionStoryDto dto = StockPositionStoryDto.builder()
+        StockStoryDto dto = StockStoryDto.builder()
+                .isLong(true)
                 .stockCode("105560")
                 .stockPrices(new int[]{55300, 55100, 56000})
                 .story("PBR이 지나치게 낮아져서 오를 여지가 있다고 생각함.")

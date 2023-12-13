@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class StockPositionStoryDto {
+public class StockStoryDto {
+    private boolean isLong;
     private String stockCode;
     private int[] stockPrices;
     private LocalDate dt;

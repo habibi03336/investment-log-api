@@ -4,7 +4,7 @@ import com.habibi.stockstoryapi.domain.StockPurchaseRecordEntity;
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
 import com.habibi.stockstoryapi.domain.StockPositionStoryEntity;
 import com.habibi.stockstoryapi.dto.CreateStatusDto;
-import com.habibi.stockstoryapi.dto.StockPositionStoryDto;
+import com.habibi.stockstoryapi.dto.StockStoryDto;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
 import com.habibi.stockstoryapi.repository.StockPositionStoryRepository;
@@ -82,26 +82,26 @@ public class StockPositionStoryServiceTest {
         );
 
         // when
-        List<StockPositionStoryDto> stockPositionStoryDtos = stockPositionStoryService.readStockLongPositionStoryOfCertainStock(stockCode);
+        List<StockStoryDto> stockStoryDtos = stockPositionStoryService.readStockLongPositionStoryOfCertainStock(stockCode);
 
         // then
-        assertThat(stockPositionStoryDtos.size()).isEqualTo(2);
+        assertThat(stockStoryDtos.size()).isEqualTo(2);
 
         // latest one comes first
-        StockPositionStoryDto stockPositionStoryDtoOfStoryId2 = stockPositionStoryDtos.get(0);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStockCode()).isEqualTo(stockCode);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStockPrices().length).isEqualTo(1);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStockPrices()[0]).isEqualTo(60000);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStory()).isEqualTo(story2);
-        assertThat(stockPositionStoryDtoOfStoryId2.getDt()).isEqualTo(stockPurchaseDate2);
+        StockStoryDto stockStoryDtoOfStoryId2 = stockStoryDtos.get(0);
+        assertThat(stockStoryDtoOfStoryId2.getStockCode()).isEqualTo(stockCode);
+        assertThat(stockStoryDtoOfStoryId2.getStockPrices().length).isEqualTo(1);
+        assertThat(stockStoryDtoOfStoryId2.getStockPrices()[0]).isEqualTo(60000);
+        assertThat(stockStoryDtoOfStoryId2.getStory()).isEqualTo(story2);
+        assertThat(stockStoryDtoOfStoryId2.getDt()).isEqualTo(stockPurchaseDate2);
 
-        StockPositionStoryDto stockPositionStoryDtoOfStoryId1 = stockPositionStoryDtos.get(1);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStockCode()).isEqualTo(stockCode);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStockPrices().length).isEqualTo(2);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStockPrices()).contains(50000);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStockPrices()).contains(50100);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStory()).isEqualTo(story1);
-        assertThat(stockPositionStoryDtoOfStoryId1.getDt()).isEqualTo(stockPurchaseDate1);
+        StockStoryDto stockStoryDtoOfStoryId1 = stockStoryDtos.get(1);
+        assertThat(stockStoryDtoOfStoryId1.getStockCode()).isEqualTo(stockCode);
+        assertThat(stockStoryDtoOfStoryId1.getStockPrices().length).isEqualTo(2);
+        assertThat(stockStoryDtoOfStoryId1.getStockPrices()).contains(50000);
+        assertThat(stockStoryDtoOfStoryId1.getStockPrices()).contains(50100);
+        assertThat(stockStoryDtoOfStoryId1.getStory()).isEqualTo(story1);
+        assertThat(stockStoryDtoOfStoryId1.getDt()).isEqualTo(stockPurchaseDate1);
     }
     @Test
     public void readStockShortPositionStoryOfCertainStock(){
@@ -153,25 +153,25 @@ public class StockPositionStoryServiceTest {
         );
 
         // when
-        List<StockPositionStoryDto> stockPositionStoryDtos = stockPositionStoryService.readStockShortPositionStoryOfCertainStock(stockCode);
+        List<StockStoryDto> stockStoryDtos = stockPositionStoryService.readStockShortPositionStoryOfCertainStock(stockCode);
 
         // then
         // latest one comes first
-        assertThat(stockPositionStoryDtos.size()).isEqualTo(2);
-        StockPositionStoryDto stockPositionStoryDtoOfStoryId2 = stockPositionStoryDtos.get(0);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStockCode()).isEqualTo(stockCode);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStockPrices().length).isEqualTo(2);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStockPrices()).contains(78000);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStockPrices()).contains(81000);
-        assertThat(stockPositionStoryDtoOfStoryId2.getStory()).isEqualTo(story2);
-        assertThat(stockPositionStoryDtoOfStoryId2.getDt()).isEqualTo(stockSellDate2);
+        assertThat(stockStoryDtos.size()).isEqualTo(2);
+        StockStoryDto stockStoryDtoOfStoryId2 = stockStoryDtos.get(0);
+        assertThat(stockStoryDtoOfStoryId2.getStockCode()).isEqualTo(stockCode);
+        assertThat(stockStoryDtoOfStoryId2.getStockPrices().length).isEqualTo(2);
+        assertThat(stockStoryDtoOfStoryId2.getStockPrices()).contains(78000);
+        assertThat(stockStoryDtoOfStoryId2.getStockPrices()).contains(81000);
+        assertThat(stockStoryDtoOfStoryId2.getStory()).isEqualTo(story2);
+        assertThat(stockStoryDtoOfStoryId2.getDt()).isEqualTo(stockSellDate2);
         
-        StockPositionStoryDto stockPositionStoryDtoOfStoryId1 = stockPositionStoryDtos.get(1);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStockCode()).isEqualTo(stockCode);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStockPrices().length).isEqualTo(1);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStockPrices()[0]).isEqualTo(60000);
-        assertThat(stockPositionStoryDtoOfStoryId1.getStory()).isEqualTo(story1);
-        assertThat(stockPositionStoryDtoOfStoryId1.getDt()).isEqualTo(stockSellDate1);
+        StockStoryDto stockStoryDtoOfStoryId1 = stockStoryDtos.get(1);
+        assertThat(stockStoryDtoOfStoryId1.getStockCode()).isEqualTo(stockCode);
+        assertThat(stockStoryDtoOfStoryId1.getStockPrices().length).isEqualTo(1);
+        assertThat(stockStoryDtoOfStoryId1.getStockPrices()[0]).isEqualTo(60000);
+        assertThat(stockStoryDtoOfStoryId1.getStory()).isEqualTo(story1);
+        assertThat(stockStoryDtoOfStoryId1.getDt()).isEqualTo(stockSellDate1);
     }
 
     @Test
@@ -182,7 +182,7 @@ public class StockPositionStoryServiceTest {
         LocalDate date = LocalDate.of(2023, 11, 3);
         String story = "Battery industry will grow and LG energy solution is a leading company.";
 
-        StockPositionStoryDto stockPositionStoryDto = StockPositionStoryDto
+        StockStoryDto stockStoryDto = StockStoryDto
                 .builder()
                 .stockCode(stockCode)
                 .stockPrices(stockPrices)
@@ -191,7 +191,7 @@ public class StockPositionStoryServiceTest {
                 .build();
 
         //when
-        CreateStatusDto createStatusDto = stockPositionStoryService.createLongPositionStory(stockPositionStoryDto);
+        CreateStatusDto createStatusDto = stockPositionStoryService.createLongPositionStory(stockStoryDto);
 
         //then
         assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);
@@ -205,7 +205,7 @@ public class StockPositionStoryServiceTest {
         LocalDate longPositionDate = LocalDate.of(2023, 11, 3);
         String longPositionStory = "Battery industry will grow and LG energy solution is a leading company.";
 
-        StockPositionStoryDto stockLongPositionStoryDto = StockPositionStoryDto
+        StockStoryDto stockLongPositionStoryDto = StockStoryDto
                 .builder()
                 .stockCode(stockCode)
                 .stockPrices(longPositionStockPrices)
@@ -218,7 +218,7 @@ public class StockPositionStoryServiceTest {
         int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
         LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);
         String shortPositionStory = "I would like to invest in semi conductor industry more";
-        StockPositionStoryDto stockShortPositionStoryDto = StockPositionStoryDto
+        StockStoryDto stockShortPositionStoryDto = StockStoryDto
                 .builder()
                 .stockCode(stockCode)
                 .stockPrices(shortPositionStockPrices)

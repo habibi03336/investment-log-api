@@ -4,7 +4,7 @@ import com.habibi.stockstoryapi.domain.StockPositionStoryEntity;
 import com.habibi.stockstoryapi.domain.StockPurchaseRecordEntity;
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
 import com.habibi.stockstoryapi.dto.CreateStatusDto;
-import com.habibi.stockstoryapi.dto.StockPositionStoryDto;
+import com.habibi.stockstoryapi.dto.StockStoryDto;
 import com.habibi.stockstoryapi.repository.StockPositionStoryRepository;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
@@ -27,11 +27,11 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
         this.stockPositionStoryRepository = stockPositionStoryRepository;
     }
     @Override
-    public CreateStatusDto createLongPositionStory(StockPositionStoryDto stockPositionStoryDto) {
-        String stockCode = stockPositionStoryDto.getStockCode();
-        int[] stockPrices = stockPositionStoryDto.getStockPrices();
-        LocalDate date = stockPositionStoryDto.getDt();
-        String story = stockPositionStoryDto.getStory();
+    public CreateStatusDto createLongPositionStory(StockStoryDto stockStoryDto) {
+        String stockCode = stockStoryDto.getStockCode();
+        int[] stockPrices = stockStoryDto.getStockPrices();
+        LocalDate date = stockStoryDto.getDt();
+        String story = stockStoryDto.getStory();
         StockPositionStoryEntity stockPositionStoryEntity = StockPositionStoryEntity
                 .builder()
                 .positionType("Long")
@@ -53,11 +53,11 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
     }
 
     @Override
-    public CreateStatusDto createShortPositionStory(StockPositionStoryDto stockPositionStoryDto) {
-        String stockCode = stockPositionStoryDto.getStockCode();
-        int[] stockPrices = stockPositionStoryDto.getStockPrices();
-        LocalDate date = stockPositionStoryDto.getDt();
-        String story = stockPositionStoryDto.getStory();
+    public CreateStatusDto createShortPositionStory(StockStoryDto stockStoryDto) {
+        String stockCode = stockStoryDto.getStockCode();
+        int[] stockPrices = stockStoryDto.getStockPrices();
+        LocalDate date = stockStoryDto.getDt();
+        String story = stockStoryDto.getStory();
         StockPositionStoryEntity stockPositionStoryEntity = StockPositionStoryEntity
                 .builder()
                 .positionType("Short")
@@ -92,7 +92,7 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
     }
 
     @Override
-    public List<StockPositionStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode) {
+    public List<StockStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode) {
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByStockCode(stockCode);
         Map<Long, List<StockPurchaseRecordEntity>> stockPurchaseRecordEntitiesByStoryId = new HashMap<>();
         for(StockPurchaseRecordEntity stockPurchaseRecordEntity : stockPurchaseRecordEntities){
@@ -106,12 +106,12 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
                 stockPurchaseRecordEntitiesByStoryId.put(storyId, stockPurchaseRecordEntitiesWithCertainStoryId);
             }
         }
-        List<StockPositionStoryDto> stockPositionStoryDtos = new ArrayList<>();
+        List<StockStoryDto> stockStoryDtos = new ArrayList<>();
         for(long storyId: stockPurchaseRecordEntitiesByStoryId.keySet()){
             List<StockPurchaseRecordEntity> stockPurchaseRecordEntitiesWithCertainStoryId = stockPurchaseRecordEntitiesByStoryId.get(storyId);
             StockPositionStoryEntity stockPositionStoryEntity = stockPositionStoryRepository.findByStoryId(storyId);
-            stockPositionStoryDtos.add(
-                    StockPositionStoryDto
+            stockStoryDtos.add(
+                    StockStoryDto
                             .builder()
                             .dt(stockPurchaseRecordEntitiesWithCertainStoryId.get(0).getPurchaseDt())
                             .stockCode(stockPurchaseRecordEntitiesWithCertainStoryId.get(0).getStockCode())
@@ -125,11 +125,11 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
                             .build()
             );
         }
-        return stockPositionStoryDtos.stream().sorted(Comparator.comparing(StockPositionStoryDto::getDt, Comparator.reverseOrder())).collect(Collectors.toList());
+        return stockStoryDtos.stream().sorted(Comparator.comparing(StockStoryDto::getDt, Comparator.reverseOrder())).collect(Collectors.toList());
     }
 
     @Override
-    public List<StockPositionStoryDto> readStockShortPositionStoryOfCertainStock(String stockCode) {
+    public List<StockStoryDto> readStockShortPositionStoryOfCertainStock(String stockCode) {
         List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByStockCode(stockCode);
         Map<Long, List<StockSellRecordEntity>> stockSellRecordEntitiesByStoryId = new HashMap<>();
         for(StockSellRecordEntity stockSellRecordEntity : stockSellRecordEntities){
@@ -143,12 +143,12 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
                 stockSellRecordEntitiesByStoryId.put(storyId, stockSellRecordEntitiesWithCertainStoryId);
             }
         }
-        List<StockPositionStoryDto> stockPositionStoryDtos = new ArrayList<>();
+        List<StockStoryDto> stockStoryDtos = new ArrayList<>();
         for(long storyId: stockSellRecordEntitiesByStoryId.keySet()){
             List<StockSellRecordEntity> stockSellRecordEntitiesWithCertainStoryId = stockSellRecordEntitiesByStoryId.get(storyId);
             StockPositionStoryEntity stockPositionStoryEntity = stockPositionStoryRepository.findByStoryId(storyId);
-            stockPositionStoryDtos.add(
-                    StockPositionStoryDto
+            stockStoryDtos.add(
+                    StockStoryDto
                             .builder()
                             .dt(stockSellRecordEntitiesWithCertainStoryId.get(0).getSellDt())
                             .stockCode(stockSellRecordEntitiesWithCertainStoryId.get(0).getStockCode())
@@ -162,6 +162,6 @@ public class StockPositionStoryServiceImpl implements  StockPositionStoryService
                             .build()
             );
         }
-        return stockPositionStoryDtos.stream().sorted(Comparator.comparing(StockPositionStoryDto::getDt, Comparator.reverseOrder())).collect(Collectors.toList());
+        return stockStoryDtos.stream().sorted(Comparator.comparing(StockStoryDto::getDt, Comparator.reverseOrder())).collect(Collectors.toList());
     }
 }

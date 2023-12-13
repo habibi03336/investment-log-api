@@ -1,6 +1,6 @@
 package com.habibi.stockstoryapi.controller;
 
-import com.habibi.stockstoryapi.dto.StockPositionStoryDto;
+import com.habibi.stockstoryapi.dto.StockStoryDto;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ public class StockLongPositionStoryController {
         return ResponseEntity.ok().build();
     }
     @PostMapping
-    public ResponseEntity createStockLongPositionStory(@RequestBody StockPositionStoryDto createStockPurchaseStoryDto){
+    public ResponseEntity createStockLongPositionStory(@RequestBody StockStoryDto createStockPurchaseStoryDto){
         URI createdUri = linkTo(StockLongPositionStoryController.class).slash("{id}").toUri();
         return ResponseEntity.created(createdUri).build();
     }
