@@ -2,7 +2,7 @@ package com.habibi.stockstoryapi.service;
 
 import com.habibi.stockstoryapi.domain.StockPurchaseRecordEntity;
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
-import com.habibi.stockstoryapi.domain.StockPositionStoryEntity;
+import com.habibi.stockstoryapi.domain.StockStoryEntity;
 import com.habibi.stockstoryapi.dto.CreateStatusDto;
 import com.habibi.stockstoryapi.dto.StockStoryDto;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
@@ -19,8 +19,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class StockPositionStoryServiceTest {
-    private StockPositionStoryService stockPositionStoryService;
+public class StockStoryServiceTest {
+    private StockStoryService stockStoryService;
     private StockPositionStoryRepository stockPositionStoryRepository;
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
@@ -29,7 +29,7 @@ public class StockPositionStoryServiceTest {
         stockPositionStoryRepository = Mockito.mock(StockPositionStoryRepository.class);
         stockPurchaseRecordRepository = Mockito.mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = Mockito.mock(StockSellRecordRepository.class);
-        stockPositionStoryService = new StockPositionStoryServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockPositionStoryRepository);
+        stockStoryService = new StockStoryServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockPositionStoryRepository);
     }
     @Test
     public void readStockLongPositionStoryOfCertainStock(){
@@ -68,21 +68,21 @@ public class StockPositionStoryServiceTest {
         when(stockPurchaseRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockPurchaseRecordEntities);
         String story1 = "Naver is great company";
         when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
-            StockPositionStoryEntity.builder()
+            StockStoryEntity.builder()
                     .storyId(storyId1)
                     .story(story1)
                     .build()
         );
         String story2 = "Naver has great potential";
         when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
-            StockPositionStoryEntity.builder()
+            StockStoryEntity.builder()
                     .storyId(storyId2)
                     .story(story2)
                     .build()
         );
 
         // when
-        List<StockStoryDto> stockStoryDtos = stockPositionStoryService.readStockLongPositionStoryOfCertainStock(stockCode);
+        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockLongPositionStoryOfCertainStock(stockCode);
 
         // then
         assertThat(stockStoryDtos.size()).isEqualTo(2);
@@ -139,21 +139,21 @@ public class StockPositionStoryServiceTest {
         when(stockSellRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockSellRecordEntities);
         String story1 = "IT market is too much hyped";
         when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
-                StockPositionStoryEntity.builder()
+                StockStoryEntity.builder()
                         .storyId(storyId1)
                         .story(story1)
                         .build()
         );
         String story2 = "IT market is way too much hyped";
         when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
-                StockPositionStoryEntity.builder()
+                StockStoryEntity.builder()
                         .storyId(storyId2)
                         .story(story2)
                         .build()
         );
 
         // when
-        List<StockStoryDto> stockStoryDtos = stockPositionStoryService.readStockShortPositionStoryOfCertainStock(stockCode);
+        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockShortPositionStoryOfCertainStock(stockCode);
 
         // then
         // latest one comes first
@@ -191,7 +191,7 @@ public class StockPositionStoryServiceTest {
                 .build();
 
         //when
-        CreateStatusDto createStatusDto = stockPositionStoryService.createLongPositionStory(stockStoryDto);
+        CreateStatusDto createStatusDto = stockStoryService.createLongPositionStory(stockStoryDto);
 
         //then
         assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);
@@ -213,13 +213,14 @@ public class StockPositionStoryServiceTest {
                 .story(longPositionStory)
                 .build();
 
-        stockPositionStoryService.createLongPositionStory(stockLongPositionStoryDto);
+        stockStoryService.createLongPositionStory(stockLongPositionStoryDto);
 
         int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
         LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);
         String shortPositionStory = "I would like to invest in semi conductor industry more";
         StockStoryDto stockShortPositionStoryDto = StockStoryDto
                 .builder()
+                .isLong(false)
                 .stockCode(stockCode)
                 .stockPrices(shortPositionStockPrices)
                 .dt(shortPositionDate)
@@ -227,7 +228,7 @@ public class StockPositionStoryServiceTest {
                 .build();
 
         //when
-        CreateStatusDto createStatusDto = stockPositionStoryService.createShortPositionStory(stockShortPositionStoryDto);
+        CreateStatusDto createStatusDto = stockStoryService.createShortPositionStory(stockShortPositionStoryDto);
 
         //then
         assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);

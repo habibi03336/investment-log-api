@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of = "storyId")
 @Entity
-public class StockPositionStoryEntity {
+public class StockStoryEntity {
     @Id @GeneratedValue
     private long storyId;
     private String positionType;

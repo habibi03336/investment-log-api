@@ -5,7 +5,7 @@ import com.habibi.stockstoryapi.dto.StockStoryDto;
 
 import java.util.List;
 
-public interface StockPositionStoryService {
+public interface StockStoryService {
     CreateStatusDto createLongPositionStory(StockStoryDto stockStoryDto);
     CreateStatusDto createShortPositionStory(StockStoryDto stockStoryDto);
     List<StockStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode);
