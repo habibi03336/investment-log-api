@@ -201,19 +201,36 @@ public class StockStoryServiceTest {
     public void createStockShortPositionStory(){
         // given
         String stockCode = "373220";
-        int[] longPositionStockPrices = new int[] { 402000, 401000, 404000 };
-        LocalDate longPositionDate = LocalDate.of(2023, 11, 3);
-        String longPositionStory = "Battery industry will grow and LG energy solution is a leading company.";
-
-        StockStoryDto stockLongPositionStoryDto = StockStoryDto
+        long storyId1 = 1;
+        LocalDate stockPurchaseDate = LocalDate.of(2023, 10, 10);
+        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
+        stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
                 .stockCode(stockCode)
-                .stockPrices(longPositionStockPrices)
-                .dt(longPositionDate)
-                .story(longPositionStory)
-                .build();
-
-        stockStoryService.createLongPositionStory(stockLongPositionStoryDto);
+                .purchasePrice(402000)
+                .storyId(storyId1)
+                .purchaseDt(stockPurchaseDate)
+                .build()
+        );
+        stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
+                .builder()
+                .stockCode(stockCode)
+                .purchasePrice(401000)
+                .storyId(storyId1)
+                .purchaseDt(stockPurchaseDate)
+                .build()
+        );
+        long storyId2 = 2;
+        LocalDate stockPurchaseDate2 = LocalDate.of(2023, 10, 23);
+        stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
+                .builder()
+                .stockCode(stockCode)
+                .purchasePrice(404000)
+                .storyId(storyId2)
+                .purchaseDt(stockPurchaseDate2)
+                .build()
+        );
+        when(stockPurchaseRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockPurchaseRecordEntities);
 
         int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
         LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);
