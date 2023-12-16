@@ -114,6 +114,7 @@ public class StockStoryServiceTest {
                 .builder()
                 .stockCode(stockCode)
                 .sellPrice(60000)
+                .avgPurchasePrice(50000)
                 .storyId(storyId1)
                 .sellDt(stockSellDate1)
                 .build()
@@ -124,6 +125,7 @@ public class StockStoryServiceTest {
                 .builder()
                 .stockCode(stockCode)
                 .sellPrice(78000)
+                .avgPurchasePrice(60000)
                 .storyId(storyId2)
                 .sellDt(stockSellDate2)
                 .build()
@@ -132,6 +134,7 @@ public class StockStoryServiceTest {
                 .builder()
                 .stockCode(stockCode)
                 .sellPrice(81000)
+                .avgPurchasePrice(70000)
                 .storyId(storyId2)
                 .sellDt(stockSellDate2)
                 .build()
@@ -163,6 +166,7 @@ public class StockStoryServiceTest {
         assertThat(stockStoryDtoOfStoryId2.getStockPrices().length).isEqualTo(2);
         assertThat(stockStoryDtoOfStoryId2.getStockPrices()).contains(78000);
         assertThat(stockStoryDtoOfStoryId2.getStockPrices()).contains(81000);
+        assertThat(stockStoryDtoOfStoryId2.getAveragePurchasePrice()).isEqualTo(65000);
         assertThat(stockStoryDtoOfStoryId2.getStory()).isEqualTo(story2);
         assertThat(stockStoryDtoOfStoryId2.getDt()).isEqualTo(stockSellDate2);
         
@@ -170,6 +174,7 @@ public class StockStoryServiceTest {
         assertThat(stockStoryDtoOfStoryId1.getStockCode()).isEqualTo(stockCode);
         assertThat(stockStoryDtoOfStoryId1.getStockPrices().length).isEqualTo(1);
         assertThat(stockStoryDtoOfStoryId1.getStockPrices()[0]).isEqualTo(60000);
+        assertThat(stockStoryDtoOfStoryId1.getAveragePurchasePrice()).isEqualTo(50000);
         assertThat(stockStoryDtoOfStoryId1.getStory()).isEqualTo(story1);
         assertThat(stockStoryDtoOfStoryId1.getDt()).isEqualTo(stockSellDate1);
     }

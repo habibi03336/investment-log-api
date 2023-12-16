@@ -12,6 +12,7 @@ import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StockStoryServiceImpl implements StockStoryService {
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
@@ -26,6 +27,16 @@ public class StockStoryServiceImpl implements StockStoryService {
         this.stockSellRecordRepository = stockSellRecordRepository;
         this.stockPositionStoryRepository = stockPositionStoryRepository;
     }
+
+    @Override
+    public CreateStatusDto createStockStory(StockStoryDto stockStoryDto) {
+        if(stockStoryDto.isLong()){
+            return createLongPositionStory(stockStoryDto);
+        } else {
+            return createShortPositionStory(stockStoryDto);
+        }
+    }
+
     @Override
     public CreateStatusDto createLongPositionStory(StockStoryDto stockStoryDto) {
         String stockCode = stockStoryDto.getStockCode();
@@ -90,6 +101,38 @@ public class StockStoryServiceImpl implements StockStoryService {
         }
         return CreateStatusDto.builder().status(CreateStatusDto.Status.SUCCESS).build();
     }
+
+    @Override
+    public StockStoryDto readStockStoryById(long id) {
+        StockStoryEntity stockStoryEntity = stockPositionStoryRepository.findByStoryId(id);
+        if(stockStoryEntity.getPositionType().equals("Long")){
+            List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByStoryId(id);
+            return StockStoryDto.builder()
+                    .storyId(id)
+                    .stockCode(stockPurchaseRecordEntities.get(0).getStockCode())
+                    .stockPrices(stockPurchaseRecordEntities.stream().mapToInt(StockPurchaseRecordEntity::getPurchasePrice).toArray())
+                    .isLong(true)
+                    .dt(stockPurchaseRecordEntities.get(0).getPurchaseDt())
+                    .story(stockStoryEntity.getStory())
+                    .build();
+        } else {
+            List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByStoryId(id);
+            return StockStoryDto.builder()
+                    .storyId(id)
+                    .stockCode(stockSellRecordEntities.get(0).getStockCode())
+                    .stockPrices(stockSellRecordEntities.stream().mapToInt(StockSellRecordEntity::getSellPrice).toArray())
+                    .averagePurchasePrice(
+                                stockSellRecordEntities.stream().mapToInt(StockSellRecordEntity::getAvgPurchasePrice).sum()
+                                        /
+                                stockSellRecordEntities.size()
+                            )
+                    .isLong(false)
+                    .dt(stockSellRecordEntities.get(0).getSellDt())
+                    .story(stockStoryEntity.getStory())
+                    .build();
+        }
+    }
+
 
     @Override
     public List<StockStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode) {
@@ -158,10 +201,30 @@ public class StockStoryServiceImpl implements StockStoryService {
                                             .mapToInt(entity -> entity.getSellPrice())
                                             .toArray()
                             )
+                            .averagePurchasePrice(
+                                    (
+                                            stockSellRecordEntitiesWithCertainStoryId
+                                            .stream()
+                                            .mapToInt(entity -> entity.getAvgPurchasePrice())
+                                            .sum()
+                                                    /
+                                            stockSellRecordEntitiesWithCertainStoryId.size()
+                                    )
+                            )
                             .story(stockStoryEntity.getStory())
                             .build()
             );
         }
         return stockStoryDtos.stream().sorted(Comparator.comparing(StockStoryDto::getDt, Comparator.reverseOrder())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StockStoryDto> readStockStoryOfCertainStock(String stockCode){
+        List<StockStoryDto> stories = Stream.concat(
+                readStockShortPositionStoryOfCertainStock(stockCode).stream(),
+                readStockLongPositionStoryOfCertainStock(stockCode).stream()
+        ).toList();
+        stories.sort(Comparator.comparing(StockStoryDto::getDt));
+        return stories;
     }
 }
