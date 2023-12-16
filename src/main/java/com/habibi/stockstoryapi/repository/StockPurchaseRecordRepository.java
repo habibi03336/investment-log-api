@@ -10,6 +10,7 @@ import java.util.List;
 public interface StockPurchaseRecordRepository extends JpaRepository<StockPurchaseRecordEntity, Long> {
 
     List<StockPurchaseRecordEntity> findAllByStockCode(String stockCode);
+    List<StockPurchaseRecordEntity> findAllByStoryId(long storyId);
     List<StockPurchaseRecordEntity> findAllByPurchaseDtIsBefore(LocalDate date);
     List<StockPurchaseRecordEntity> findAllByPurchaseDtIsBetween(LocalDate start, LocalDate end);
 }
