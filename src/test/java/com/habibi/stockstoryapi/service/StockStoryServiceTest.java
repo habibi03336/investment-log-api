@@ -189,6 +189,112 @@ public class StockStoryServiceTest {
     }
 
     @Test
+    public void readStockStoryOfCertainStock(){
+        // given
+        String stockCode = "035420";
+        // same storyId -> same stock purchase/sell date
+        long storyId1 = 1;
+        LocalDate stockPurchaseDate1 = LocalDate.of(2023, 10, 10);
+        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
+        stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
+                .builder()
+                .stockCode(stockCode)
+                .purchasePrice(50000)
+                .storyId(storyId1)
+                .purchaseDt(stockPurchaseDate1)
+                .build()
+        );
+        stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
+                .builder()
+                .stockCode(stockCode)
+                .purchasePrice(50100)
+                .storyId(storyId1)
+                .purchaseDt(stockPurchaseDate1)
+                .build()
+        );
+        long storyId2 = 2;
+        LocalDate stockPurchaseDate2 = LocalDate.of(2023, 10, 23);
+        stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
+                .builder()
+                .stockCode(stockCode)
+                .purchasePrice(60000)
+                .storyId(storyId2)
+                .purchaseDt(stockPurchaseDate2)
+                .build()
+        );
+        when(stockPurchaseRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockPurchaseRecordEntities);
+        String story1 = "Naver is great company";
+        when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
+                StockStoryEntity.builder()
+                        .storyId(storyId1)
+                        .story(story1)
+                        .build()
+        );
+        String story2 = "Naver has great potential";
+        when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
+                StockStoryEntity.builder()
+                        .storyId(storyId2)
+                        .story(story2)
+                        .build()
+        );
+
+        String stockCode2 = "035420";
+        long storyId3 = 3;
+        LocalDate stockSellDate1 = LocalDate.of(2023, 10, 21);
+        List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
+        stockSellRecordEntities.add(StockSellRecordEntity
+                .builder()
+                .stockCode(stockCode2)
+                .sellPrice(60000)
+                .avgPurchasePrice(50000)
+                .storyId(storyId3)
+                .sellDt(stockSellDate1)
+                .build()
+        );
+        long storyId4 = 4;
+        LocalDate stockSellDate2 = LocalDate.of(2023, 10, 22);
+        stockSellRecordEntities.add(StockSellRecordEntity
+                .builder()
+                .stockCode(stockCode2)
+                .sellPrice(78000)
+                .avgPurchasePrice(60000)
+                .storyId(storyId4)
+                .sellDt(stockSellDate2)
+                .build()
+        );
+        stockSellRecordEntities.add(StockSellRecordEntity
+                .builder()
+                .stockCode(stockCode2)
+                .sellPrice(81000)
+                .avgPurchasePrice(70000)
+                .storyId(storyId4)
+                .sellDt(stockSellDate2)
+                .build()
+        );
+        when(stockSellRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockSellRecordEntities);
+        String story3 = "IT market is too much hyped";
+        when(stockPositionStoryRepository.findByStoryId(storyId3)).thenReturn(
+                StockStoryEntity.builder()
+                        .storyId(storyId3)
+                        .story(story3)
+                        .build()
+        );
+        String story4 = "IT market is way too much hyped";
+        when(stockPositionStoryRepository.findByStoryId(storyId4)).thenReturn(
+                StockStoryEntity.builder()
+                        .storyId(storyId4)
+                        .story(story4)
+                        .build()
+        );
+
+        // when
+        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockStoryOfCertainStock(stockCode);
+
+        // then
+        assertThat(stockStoryDtos.size()).isEqualTo(4);
+    }
+
+    @Test
     public void createStockLongPositionStory(){
         // given
         String stockCode = "373220";
