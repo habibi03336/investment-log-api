@@ -13,9 +13,16 @@ import java.util.stream.Collectors;
 public class StockRecordServiceImpl implements  StockRecordService{
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
-    public StockRecordServiceImpl(StockPurchaseRecordRepository stockPurchaseRecordRepository, StockSellRecordRepository stockSellRecordRepository){
+    private StockCodeToNameMapper stockCodeToNameMapper;
+
+    public StockRecordServiceImpl(
+            StockPurchaseRecordRepository stockPurchaseRecordRepository,
+            StockSellRecordRepository stockSellRecordRepository,
+            StockCodeToNameMapper stockCodeToNameMapper
+    ){
         this.stockPurchaseRecordRepository = stockPurchaseRecordRepository;
         this.stockSellRecordRepository = stockSellRecordRepository;
+        this.stockCodeToNameMapper = stockCodeToNameMapper;
     }
     @Override
     public List<StockRecordDto> readStockPurchaseRecordsBetweenPeriods(LocalDate start, LocalDate end) {
@@ -23,6 +30,7 @@ public class StockRecordServiceImpl implements  StockRecordService{
         return stockPurchaseRecordEntities.stream().map((entity) ->
                 StockRecordDto
                         .builder()
+                        .stockName(stockCodeToNameMapper.getStockName(entity.getStockCode()))
                         .stockCode(entity.getStockCode())
                         .stockPrice(entity.getPurchasePrice())
                         .dt(entity.getPurchaseDt())
@@ -35,6 +43,7 @@ public class StockRecordServiceImpl implements  StockRecordService{
         return stockSellRecordEntities.stream().map((entity) ->
                 StockRecordDto
                         .builder()
+                        .stockName(stockCodeToNameMapper.getStockName(entity.getStockCode()))
                         .stockCode(entity.getStockCode())
                         .stockPrice(entity.getSellPrice())
                         .dt(entity.getSellDt())

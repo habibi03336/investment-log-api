@@ -18,14 +18,17 @@ public class StockStoryServiceImpl implements StockStoryService {
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
     private StockPositionStoryRepository stockPositionStoryRepository;
+    private StockCodeToNameMapper stockCodeToNameMapper;
     public StockStoryServiceImpl(
             StockPurchaseRecordRepository stockPurchaseRecordRepository,
             StockSellRecordRepository stockSellRecordRepository,
-            StockPositionStoryRepository stockPositionStoryRepository
+            StockPositionStoryRepository stockPositionStoryRepository,
+            StockCodeToNameMapper stockCodeToNameMapper
     ){
         this.stockPurchaseRecordRepository = stockPurchaseRecordRepository;
         this.stockSellRecordRepository = stockSellRecordRepository;
         this.stockPositionStoryRepository = stockPositionStoryRepository;
+        this.stockCodeToNameMapper = stockCodeToNameMapper;
     }
 
     @Override
@@ -109,6 +112,7 @@ public class StockStoryServiceImpl implements StockStoryService {
             List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByStoryId(id);
             return StockStoryDto.builder()
                     .storyId(id)
+                    .stockName(stockCodeToNameMapper.getStockName(stockPurchaseRecordEntities.get(0).getStockCode()))
                     .stockCode(stockPurchaseRecordEntities.get(0).getStockCode())
                     .stockPrices(stockPurchaseRecordEntities.stream().mapToInt(StockPurchaseRecordEntity::getPurchasePrice).toArray())
                     .isLong(true)
@@ -119,6 +123,7 @@ public class StockStoryServiceImpl implements StockStoryService {
             List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByStoryId(id);
             return StockStoryDto.builder()
                     .storyId(id)
+                    .stockName(stockCodeToNameMapper.getStockName(stockSellRecordEntities.get(0).getStockCode()))
                     .stockCode(stockSellRecordEntities.get(0).getStockCode())
                     .stockPrices(stockSellRecordEntities.stream().mapToInt(StockSellRecordEntity::getSellPrice).toArray())
                     .averagePurchasePrice(
@@ -136,6 +141,7 @@ public class StockStoryServiceImpl implements StockStoryService {
 
     @Override
     public List<StockStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode) {
+        String stockName = stockCodeToNameMapper.getStockName(stockCode);
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByStockCode(stockCode);
         Map<Long, List<StockPurchaseRecordEntity>> stockPurchaseRecordEntitiesByStoryId = new HashMap<>();
         for(StockPurchaseRecordEntity stockPurchaseRecordEntity : stockPurchaseRecordEntities){
@@ -156,6 +162,7 @@ public class StockStoryServiceImpl implements StockStoryService {
             stockStoryDtos.add(
                     StockStoryDto
                             .builder()
+                            .stockName(stockName)
                             .dt(stockPurchaseRecordEntitiesWithCertainStoryId.get(0).getPurchaseDt())
                             .stockCode(stockPurchaseRecordEntitiesWithCertainStoryId.get(0).getStockCode())
                             .stockPrices(
@@ -173,6 +180,7 @@ public class StockStoryServiceImpl implements StockStoryService {
 
     @Override
     public List<StockStoryDto> readStockShortPositionStoryOfCertainStock(String stockCode) {
+        String stockName = stockCodeToNameMapper.getStockName(stockCode);
         List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByStockCode(stockCode);
         Map<Long, List<StockSellRecordEntity>> stockSellRecordEntitiesByStoryId = new HashMap<>();
         for(StockSellRecordEntity stockSellRecordEntity : stockSellRecordEntities){
@@ -193,6 +201,7 @@ public class StockStoryServiceImpl implements StockStoryService {
             stockStoryDtos.add(
                     StockStoryDto
                             .builder()
+                            .stockName(stockName)
                             .dt(stockSellRecordEntitiesWithCertainStoryId.get(0).getSellDt())
                             .stockCode(stockSellRecordEntitiesWithCertainStoryId.get(0).getStockCode())
                             .stockPrices(

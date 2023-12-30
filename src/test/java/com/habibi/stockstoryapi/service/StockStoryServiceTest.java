@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class StockStoryServiceTest {
@@ -24,12 +25,20 @@ public class StockStoryServiceTest {
     private StockPositionStoryRepository stockPositionStoryRepository;
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
+    private StockCodeToNameMapper stockCodeToNameMapper;
+
     @BeforeEach
     void setUp() {
         stockPositionStoryRepository = Mockito.mock(StockPositionStoryRepository.class);
         stockPurchaseRecordRepository = Mockito.mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = Mockito.mock(StockSellRecordRepository.class);
-        stockStoryService = new StockStoryServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockPositionStoryRepository);
+        stockCodeToNameMapper = mock(StockCodeToNameMapper.class);
+        stockStoryService = new StockStoryServiceImpl(
+                stockPurchaseRecordRepository,
+                stockSellRecordRepository,
+                stockPositionStoryRepository,
+                stockCodeToNameMapper
+        );
     }
     @Test
     public void readStockLongPositionStoryOfCertainStock(){

@@ -22,11 +22,13 @@ public class OwnStockServiceImplTest {
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
     private OwnStockService ownStockService;
+    private StockCodeToNameMapper stockCodeToNameMapper;
     @BeforeEach
     void setUp() {
         stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = mock(StockSellRecordRepository.class);
-        ownStockService = new OwnStockServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository);
+        stockCodeToNameMapper = mock(StockCodeToNameMapper.class);
+        ownStockService = new OwnStockServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockCodeToNameMapper);
     }
     @Test
     public void returnEmptyListWhenNoOwnStock(){

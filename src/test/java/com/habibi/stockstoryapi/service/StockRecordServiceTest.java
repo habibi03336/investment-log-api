@@ -22,12 +22,14 @@ public class StockRecordServiceTest {
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
     private StockRecordService stockRecordService;
+    private StockCodeToNameMapper stockCodeToNameMapper;
 
     @BeforeEach
     void setUp() {
         stockPurchaseRecordRepository = mock(StockPurchaseRecordRepository.class);
         stockSellRecordRepository = mock(StockSellRecordRepository.class);
-        stockRecordService = new StockRecordServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository);
+        stockCodeToNameMapper = mock(StockCodeToNameMapper.class);
+        stockRecordService = new StockRecordServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockCodeToNameMapper);
     }
 
     @Test

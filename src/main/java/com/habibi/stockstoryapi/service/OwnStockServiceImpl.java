@@ -16,10 +16,16 @@ public class OwnStockServiceImpl implements OwnStockService {
 
     private StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private StockSellRecordRepository stockSellRecordRepository;
+    private StockCodeToNameMapper stockCodeToNameMapper;
 
-    public OwnStockServiceImpl(StockPurchaseRecordRepository stockPurchaseRecordRepository, StockSellRecordRepository stockSellRecordRepository){
+    public OwnStockServiceImpl(
+            StockPurchaseRecordRepository stockPurchaseRecordRepository,
+            StockSellRecordRepository stockSellRecordRepository,
+            StockCodeToNameMapper stockCodeToNameMapper
+    ){
         this.stockPurchaseRecordRepository = stockPurchaseRecordRepository;
         this.stockSellRecordRepository = stockSellRecordRepository;
+        this.stockCodeToNameMapper = stockCodeToNameMapper;
     }
 
     @Override
@@ -38,7 +44,7 @@ public class OwnStockServiceImpl implements OwnStockService {
         return ownStocks;
     }
 
-    private static List<OwnStockDto> getOwnStocksByPurchaseAndSellRecords(List<StockPurchaseRecordEntity> stockPurchaseRecords,
+    private List<OwnStockDto> getOwnStocksByPurchaseAndSellRecords(List<StockPurchaseRecordEntity> stockPurchaseRecords,
                                                                           List<StockSellRecordEntity> stockSellRecords) {
         Map<String, long[]> totalPurchasePriceAndCountByStockCode = new HashMap<>();
         for(StockPurchaseRecordEntity stockPurchaseRecordEntity : stockPurchaseRecords){
@@ -66,6 +72,7 @@ public class OwnStockServiceImpl implements OwnStockService {
                 ownStocks.add(
                         OwnStockDto
                                 .builder()
+                                .stockName(stockCodeToNameMapper.getStockName(stockCode))
                                 .stockCode(stockCode)
                                 .stockCount((int) totalPricesAndCount[1])
                                 .averagePurchasePrice((int) (totalPricesAndCount[0] / totalPricesAndCount[1]))

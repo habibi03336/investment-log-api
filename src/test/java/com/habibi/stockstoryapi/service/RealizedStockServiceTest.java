@@ -19,10 +19,13 @@ public class RealizedStockServiceTest {
 
     private StockSellRecordRepository stockSellRecordRepository;
     private RealizedStockService realizedStockService;
+    private StockCodeToNameMapper stockCodeToNameMapper;
+
     @BeforeEach
     void setUp() {
         stockSellRecordRepository = mock(StockSellRecordRepository.class);
-        realizedStockService = new RealizedStockServiceImpl(stockSellRecordRepository);
+        stockCodeToNameMapper = mock(StockCodeToNameMapper.class);
+        realizedStockService = new RealizedStockServiceImpl(stockSellRecordRepository, stockCodeToNameMapper);
     }
 
     @Test

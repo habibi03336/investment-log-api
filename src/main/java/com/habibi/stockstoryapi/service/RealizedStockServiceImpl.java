@@ -11,8 +11,11 @@ import java.util.Map;
 
 public class RealizedStockServiceImpl implements RealizedStockService {
     private StockSellRecordRepository stockSellRecordRepository;
-    public RealizedStockServiceImpl(StockSellRecordRepository stockSellRecordRepository){
+    private StockCodeToNameMapper stockCodeToNameMapper;
+
+    public RealizedStockServiceImpl(StockSellRecordRepository stockSellRecordRepository, StockCodeToNameMapper stockCodeToNameMapper){
         this.stockSellRecordRepository = stockSellRecordRepository;
+        this.stockCodeToNameMapper = stockCodeToNameMapper;
     }
     @Override
     public List<RealizedStockDto> readRealizedStocks() {
@@ -42,6 +45,7 @@ public class RealizedStockServiceImpl implements RealizedStockService {
             realizedStockDtos.add(
                     RealizedStockDto
                             .builder()
+                            .stockName(stockCodeToNameMapper.getStockName(stockCode))
                             .stockCode(stockCode)
                             .averagePurchasePrice((int)(totalPurchasePriceAndTotalSellPriceAndCount[0]/totalPurchasePriceAndTotalSellPriceAndCount[2]))
                             .averageSellPrice((int)(totalPurchasePriceAndTotalSellPriceAndCount[1] / totalPurchasePriceAndTotalSellPriceAndCount[2]))
