@@ -163,6 +163,7 @@ public class StockStoryServiceImpl implements StockStoryService {
                     StockStoryDto
                             .builder()
                             .stockName(stockName)
+                            .isLong(true)
                             .dt(stockPurchaseRecordEntitiesWithCertainStoryId.get(0).getPurchaseDt())
                             .stockCode(stockPurchaseRecordEntitiesWithCertainStoryId.get(0).getStockCode())
                             .stockPrices(
@@ -202,6 +203,7 @@ public class StockStoryServiceImpl implements StockStoryService {
                     StockStoryDto
                             .builder()
                             .stockName(stockName)
+                            .isLong(false)
                             .dt(stockSellRecordEntitiesWithCertainStoryId.get(0).getSellDt())
                             .stockCode(stockSellRecordEntitiesWithCertainStoryId.get(0).getStockCode())
                             .stockPrices(
@@ -232,7 +234,7 @@ public class StockStoryServiceImpl implements StockStoryService {
         List<StockStoryDto> stories = Stream.concat(
                 readStockShortPositionStoryOfCertainStock(stockCode).stream(),
                 readStockLongPositionStoryOfCertainStock(stockCode).stream()
-        ).toList();
+        ).collect(Collectors.toList());
         stories.sort(Comparator.comparing(StockStoryDto::getDt));
         return stories;
     }
