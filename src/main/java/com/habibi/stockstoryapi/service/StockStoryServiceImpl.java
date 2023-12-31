@@ -162,6 +162,7 @@ public class StockStoryServiceImpl implements StockStoryService {
             stockStoryDtos.add(
                     StockStoryDto
                             .builder()
+                            .storyId(storyId)
                             .stockName(stockName)
                             .isLong(true)
                             .dt(stockPurchaseRecordEntitiesWithCertainStoryId.get(0).getPurchaseDt())
@@ -176,7 +177,7 @@ public class StockStoryServiceImpl implements StockStoryService {
                             .build()
             );
         }
-        return stockStoryDtos.stream().sorted(Comparator.comparing(StockStoryDto::getDt, Comparator.reverseOrder())).collect(Collectors.toList());
+        return stockStoryDtos.stream().sorted(Comparator.comparing(StockStoryDto::getStoryId, Comparator.reverseOrder())).collect(Collectors.toList());
     }
 
     @Override
@@ -202,6 +203,7 @@ public class StockStoryServiceImpl implements StockStoryService {
             stockStoryDtos.add(
                     StockStoryDto
                             .builder()
+                            .storyId(storyId)
                             .stockName(stockName)
                             .isLong(false)
                             .dt(stockSellRecordEntitiesWithCertainStoryId.get(0).getSellDt())
@@ -226,7 +228,7 @@ public class StockStoryServiceImpl implements StockStoryService {
                             .build()
             );
         }
-        return stockStoryDtos.stream().sorted(Comparator.comparing(StockStoryDto::getDt, Comparator.reverseOrder())).collect(Collectors.toList());
+        return stockStoryDtos.stream().sorted(Comparator.comparing(StockStoryDto::getStoryId, Comparator.reverseOrder())).collect(Collectors.toList());
     }
 
     @Override
@@ -235,7 +237,7 @@ public class StockStoryServiceImpl implements StockStoryService {
                 readStockShortPositionStoryOfCertainStock(stockCode).stream(),
                 readStockLongPositionStoryOfCertainStock(stockCode).stream()
         ).collect(Collectors.toList());
-        stories.sort(Comparator.comparing(StockStoryDto::getDt));
+        stories.sort(Comparator.comparing(StockStoryDto::getStoryId, Comparator.reverseOrder()));
         return stories;
     }
 }
