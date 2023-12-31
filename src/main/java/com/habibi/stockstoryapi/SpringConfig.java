@@ -5,11 +5,12 @@ import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
 import com.habibi.stockstoryapi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.*;
 
 @Configuration
+@PropertySources({
+        @PropertySource("classpath:.env")
+})
 public class SpringConfig {
     private final StockPositionStoryRepository stockPositionStoryRepository;
     private final StockPurchaseRecordRepository stockPurchaseRecordRepository;
