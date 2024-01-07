@@ -2,10 +2,12 @@ package com.habibi.stockstoryapi.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import util.HttpsURLConnectionWrapper;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class StockCodeToNameMapperByFinanceAPI implements StockCodeToNameMapper {
@@ -18,32 +20,41 @@ public class StockCodeToNameMapperByFinanceAPI implements StockCodeToNameMapper 
 
     @Override
     public String getStockName(String stockCode) {
-        HttpURLConnection con = null;
         try {
-            URL url = new URL(this.url + stockCode);
-            con = (HttpURLConnection) url.openConnection();
+            HttpsURLConnection con = makeConnection(this.url + stockCode);
             con.setRequestMethod("GET");
             int status = con.getResponseCode();
             if(status != 200){
                 throw new Exception("finance api return status is not 200");
             }
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode resBody = mapper.readTree(content.toString());
+            JsonNode resBody = new ObjectMapper().readTree(getInputFrom(con));
             return resBody.get("name").asText();
         } catch (Exception e) {
             return "undefined";
-        } finally {
-            if(con != null){
-                con.disconnect();
+        }
+    }
+
+    public HttpsURLConnection makeConnection(String url) throws IOException {
+        try (
+                HttpsURLConnectionWrapper connectionWrapper =
+                        new HttpsURLConnectionWrapper(new URL(url))
+        ) {
+            HttpsURLConnection con = connectionWrapper.getConnection();
+            return con;
+        }
+    }
+
+    public String getInputFrom(HttpsURLConnection con) throws IOException {
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        try (
+                BufferedReader in
+                        = new BufferedReader(new InputStreamReader(con.getInputStream()))
+        ){
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
             }
         }
+        return content.toString();
     }
 }
