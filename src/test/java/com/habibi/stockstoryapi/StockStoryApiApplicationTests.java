@@ -1,10 +1,12 @@
 package com.habibi.stockstoryapi;
 
+import jakarta.transaction.Transactional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,6 +28,8 @@ class StockStoryApiApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(username = "user", password = "pwd", roles = "USER_ROLE")
+	@Transactional
 	public void 주식구매이야기등록후조회API테스트() throws Exception {
 		// 주식 구매 이야기 등록
 		ResultActions responseOfPost = mockMvc.perform(
@@ -128,6 +132,8 @@ class StockStoryApiApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(username = "user", password = "pwd", roles = "USER_ROLE")
+	@Transactional
 	public void 주식판매이야기등록후조회API테스트() throws Exception {
 		// 주식 구매 이야기 등록
 		ResultActions responseOfCreateLongStory = mockMvc.perform(
