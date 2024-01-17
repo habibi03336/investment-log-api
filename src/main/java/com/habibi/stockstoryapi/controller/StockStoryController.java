@@ -5,7 +5,6 @@ import com.habibi.stockstoryapi.dto.StockStoryDto;
 import com.habibi.stockstoryapi.service.StockStoryService;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -13,7 +12,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
-@Controller
+@RestController
 @RequestMapping(value="/api/stock-story", produces = MediaTypes.HAL_JSON_VALUE)
 public class StockStoryController {
 
