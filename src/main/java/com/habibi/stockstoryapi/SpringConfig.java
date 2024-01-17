@@ -5,6 +5,7 @@ import com.habibi.stockstoryapi.auth.JwtUtils;
 import com.habibi.stockstoryapi.repository.StockPositionStoryRepository;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
+import com.habibi.stockstoryapi.repository.UserRepository;
 import com.habibi.stockstoryapi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
@@ -35,16 +36,18 @@ public class SpringConfig {
     private final StockPositionStoryRepository stockPositionStoryRepository;
     private final StockPurchaseRecordRepository stockPurchaseRecordRepository;
     private final StockSellRecordRepository stockSellRecordRepository;
+    private final UserRepository userRepository;
     @Autowired
     public SpringConfig(
             StockPositionStoryRepository stockPositionStoryRepository,
             StockPurchaseRecordRepository stockPurchaseRecordRepository,
-            StockSellRecordRepository stockSellRecordRepository
-
+            StockSellRecordRepository stockSellRecordRepository,
+            UserRepository userRepository
     ){
         this.stockPositionStoryRepository = stockPositionStoryRepository;
         this.stockPurchaseRecordRepository = stockPurchaseRecordRepository;
         this.stockSellRecordRepository = stockSellRecordRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -117,7 +120,7 @@ public class SpringConfig {
 
     @Bean
     public UserDetailsService userDetailService(){
-        return new UserDetailsServiceImpl();
+        return new UserDetailsServiceImpl(userRepository);
     }
 
     @Bean
