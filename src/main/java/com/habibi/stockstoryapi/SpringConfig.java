@@ -128,4 +128,9 @@ public class SpringConfig {
         return new JwtUtils();
     }
 
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
+    }
+
 }
