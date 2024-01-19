@@ -28,7 +28,7 @@ class StockStoryApiApplicationTests {
 	}
 
 	@Test
-	@WithMockUser(username = "user", password = "pwd", roles = "USER_ROLE")
+	@WithMockUser(authorities = {"USER"})
 	@Transactional
 	public void 주식구매이야기등록후조회API테스트() throws Exception {
 		// 주식 구매 이야기 등록
@@ -132,7 +132,7 @@ class StockStoryApiApplicationTests {
 	}
 
 	@Test
-	@WithMockUser(username = "user", password = "pwd", roles = "USER_ROLE")
+	@WithMockUser(authorities = {"USER"})
 	@Transactional
 	public void 주식판매이야기등록후조회API테스트() throws Exception {
 		// 주식 구매 이야기 등록
