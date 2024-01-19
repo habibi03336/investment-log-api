@@ -5,6 +5,7 @@ import com.habibi.stockstoryapi.dto.StockStoryDto;
 import com.habibi.stockstoryapi.service.StockStoryService;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -14,6 +15,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(value="/api/stock-story", produces = MediaTypes.HAL_JSON_VALUE)
+@PreAuthorize("hasAuthority('USER')")
 public class StockStoryController {
 
     private final StockStoryService stockStoryService;
