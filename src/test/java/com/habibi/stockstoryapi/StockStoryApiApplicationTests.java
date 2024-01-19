@@ -1,5 +1,7 @@
 package com.habibi.stockstoryapi;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.jayway.jsonpath.JsonPath;
 import jakarta.transaction.Transactional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
@@ -47,15 +49,18 @@ class StockStoryApiApplicationTests {
 						""")
 		);
 		responseOfPost.andExpect(MockMvcResultMatchers.status().isCreated());
+		String createdStoryId = JsonPath.parse(
+				responseOfPost.andReturn().getResponse().getContentAsString())
+				.read("$.id", String.class);
 
 		// id로 주식 스토리 반환
 		ResultActions responseOfStoryById = mockMvc.perform(
 				MockMvcRequestBuilders
-						.get("/api/stock-story/1")
+						.get("/api/stock-story/" + createdStoryId)
 						.contentType("application/json")
 		);
 
-		responseOfStoryById.andExpect(MockMvcResultMatchers.jsonPath("$.storyId", CoreMatchers.is(1)));
+		responseOfStoryById.andExpect(MockMvcResultMatchers.jsonPath("$.storyId", CoreMatchers.is(Integer.parseInt(createdStoryId))));
 		responseOfStoryById.andExpect(MockMvcResultMatchers.jsonPath("$.stockName", CoreMatchers.is("LG전자")));
 		responseOfStoryById.andExpect(MockMvcResultMatchers.jsonPath("$.stockPrices", CoreMatchers.is(List.of(30000, 40000, 50000))));
 		responseOfStoryById.andExpect(MockMvcResultMatchers.jsonPath("$.dt", CoreMatchers.is("2023-12-31")));
@@ -103,7 +108,7 @@ class StockStoryApiApplicationTests {
 						.contentType("application/json")
 		);
 
-		responseOfStockStoryOfCertainStock.andExpect(MockMvcResultMatchers.jsonPath("$[0].storyId", CoreMatchers.is(1)));
+		responseOfStockStoryOfCertainStock.andExpect(MockMvcResultMatchers.jsonPath("$[0].storyId", CoreMatchers.is(Integer.parseInt(createdStoryId))));
 		responseOfStockStoryOfCertainStock.andExpect(MockMvcResultMatchers.jsonPath("$[0].stockCode", CoreMatchers.is("066570")));
 		responseOfStockStoryOfCertainStock.andExpect(MockMvcResultMatchers.jsonPath("$[0].stockName", CoreMatchers.is("LG전자")));
 		responseOfStockStoryOfCertainStock.andExpect(MockMvcResultMatchers.jsonPath("$[0].stockPrices", CoreMatchers.is(List.of(30000, 40000, 50000))));
