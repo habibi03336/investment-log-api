@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class CreateStatusDto {
     private Status status;
+    private String id;
 
     public enum Status {
         SUCCESS,

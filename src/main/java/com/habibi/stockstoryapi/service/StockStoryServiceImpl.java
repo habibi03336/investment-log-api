@@ -63,7 +63,10 @@ public class StockStoryServiceImpl implements StockStoryService {
                     .build();
             stockPurchaseRecordRepository.save(stockPurchaseRecordEntity);
         }
-        return CreateStatusDto.builder().status(CreateStatusDto.Status.SUCCESS).build();
+        return CreateStatusDto.builder()
+                .status(CreateStatusDto.Status.SUCCESS)
+                .id(Long.toString(storyId))
+                .build();
     }
 
     @Override
@@ -102,7 +105,10 @@ public class StockStoryServiceImpl implements StockStoryService {
                     .build();
             stockSellRecordRepository.save(stockSellRecordEntity);
         }
-        return CreateStatusDto.builder().status(CreateStatusDto.Status.SUCCESS).build();
+        return CreateStatusDto.builder()
+                .status(CreateStatusDto.Status.SUCCESS)
+                .id(Long.toString(storyId))
+                .build();
     }
 
     @Override
