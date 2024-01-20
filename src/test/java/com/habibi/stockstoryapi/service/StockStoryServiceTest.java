@@ -43,6 +43,7 @@ public class StockStoryServiceTest {
     @Test
     public void readStockLongPositionStoryOfCertainStock(){
         // given
+        int userId = 1;
         String stockCode = "035420";
         // same storyId -> same stock purchase/sell date
         long storyId1 = 1;
@@ -50,6 +51,7 @@ public class StockStoryServiceTest {
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(50000)
                 .storyId(storyId1)
@@ -58,6 +60,7 @@ public class StockStoryServiceTest {
         );
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(50100)
                 .storyId(storyId1)
@@ -68,17 +71,19 @@ public class StockStoryServiceTest {
         LocalDate stockPurchaseDate2 = LocalDate.of(2023, 10, 23);
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(60000)
                 .storyId(storyId2)
                 .purchaseDt(stockPurchaseDate2)
                 .build()
         );
-        when(stockPurchaseRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockPurchaseRecordEntities);
+        when(stockPurchaseRecordRepository.findAllByUserIdAndStockCode(userId, stockCode)).thenReturn(stockPurchaseRecordEntities);
         String story1 = "Naver is great company";
         when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
             StockStoryEntity.builder()
                     .storyId(storyId1)
+                    .userId(userId)
                     .story(story1)
                     .build()
         );
@@ -86,12 +91,13 @@ public class StockStoryServiceTest {
         when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
             StockStoryEntity.builder()
                     .storyId(storyId2)
+                    .userId(userId)
                     .story(story2)
                     .build()
         );
 
         // when
-        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockLongPositionStoryOfCertainStock(stockCode);
+        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockLongPositionStoryOfCertainStock(userId, stockCode);
 
         // then
         assertThat(stockStoryDtos.size()).isEqualTo(2);
@@ -115,12 +121,14 @@ public class StockStoryServiceTest {
     @Test
     public void readStockShortPositionStoryOfCertainStock(){
         // given
+        int userId = 1;
         String stockCode = "035420";
         long storyId1 = 1;
         LocalDate stockSellDate1 = LocalDate.of(2023, 10, 21);
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
         stockSellRecordEntities.add(StockSellRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .sellPrice(60000)
                 .avgPurchasePrice(50000)
@@ -132,6 +140,7 @@ public class StockStoryServiceTest {
         LocalDate stockSellDate2 = LocalDate.of(2023, 10, 22);
         stockSellRecordEntities.add(StockSellRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .sellPrice(78000)
                 .avgPurchasePrice(60000)
@@ -141,6 +150,7 @@ public class StockStoryServiceTest {
         );
         stockSellRecordEntities.add(StockSellRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .sellPrice(81000)
                 .avgPurchasePrice(70000)
@@ -148,10 +158,11 @@ public class StockStoryServiceTest {
                 .sellDt(stockSellDate2)
                 .build()
         );
-        when(stockSellRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockSellRecordEntities);
+        when(stockSellRecordRepository.findAllByUserIdAndStockCode(userId, stockCode)).thenReturn(stockSellRecordEntities);
         String story1 = "IT market is too much hyped";
         when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
                 StockStoryEntity.builder()
+                        .userId(userId)
                         .storyId(storyId1)
                         .story(story1)
                         .build()
@@ -159,13 +170,14 @@ public class StockStoryServiceTest {
         String story2 = "IT market is way too much hyped";
         when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
                 StockStoryEntity.builder()
+                        .userId(userId)
                         .storyId(storyId2)
                         .story(story2)
                         .build()
         );
 
         // when
-        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockShortPositionStoryOfCertainStock(stockCode);
+        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockShortPositionStoryOfCertainStock(userId, stockCode);
 
         // then
         // latest one comes first
@@ -191,6 +203,7 @@ public class StockStoryServiceTest {
     @Test
     public void readStockStoryOfCertainStock(){
         // given
+        int userId = 1;
         String stockCode = "035420";
         // same storyId -> same stock purchase/sell date
         long storyId1 = 1;
@@ -198,6 +211,7 @@ public class StockStoryServiceTest {
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(50000)
                 .storyId(storyId1)
@@ -206,6 +220,7 @@ public class StockStoryServiceTest {
         );
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(50100)
                 .storyId(storyId1)
@@ -216,17 +231,19 @@ public class StockStoryServiceTest {
         LocalDate stockPurchaseDate2 = LocalDate.of(2023, 10, 23);
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(60000)
                 .storyId(storyId2)
                 .purchaseDt(stockPurchaseDate2)
                 .build()
         );
-        when(stockPurchaseRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockPurchaseRecordEntities);
+        when(stockPurchaseRecordRepository.findAllByUserIdAndStockCode(userId, stockCode)).thenReturn(stockPurchaseRecordEntities);
         String story1 = "Naver is great company";
         when(stockPositionStoryRepository.findByStoryId(storyId1)).thenReturn(
                 StockStoryEntity.builder()
                         .storyId(storyId1)
+                        .userId(userId)
                         .story(story1)
                         .build()
         );
@@ -234,6 +251,7 @@ public class StockStoryServiceTest {
         when(stockPositionStoryRepository.findByStoryId(storyId2)).thenReturn(
                 StockStoryEntity.builder()
                         .storyId(storyId2)
+                        .userId(userId)
                         .story(story2)
                         .build()
         );
@@ -244,6 +262,7 @@ public class StockStoryServiceTest {
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
         stockSellRecordEntities.add(StockSellRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode2)
                 .sellPrice(60000)
                 .avgPurchasePrice(50000)
@@ -255,6 +274,7 @@ public class StockStoryServiceTest {
         LocalDate stockSellDate2 = LocalDate.of(2023, 10, 22);
         stockSellRecordEntities.add(StockSellRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode2)
                 .sellPrice(78000)
                 .avgPurchasePrice(60000)
@@ -264,6 +284,7 @@ public class StockStoryServiceTest {
         );
         stockSellRecordEntities.add(StockSellRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode2)
                 .sellPrice(81000)
                 .avgPurchasePrice(70000)
@@ -271,10 +292,11 @@ public class StockStoryServiceTest {
                 .sellDt(stockSellDate2)
                 .build()
         );
-        when(stockSellRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockSellRecordEntities);
+        when(stockSellRecordRepository.findAllByUserIdAndStockCode(userId, stockCode)).thenReturn(stockSellRecordEntities);
         String story3 = "IT market is too much hyped";
         when(stockPositionStoryRepository.findByStoryId(storyId3)).thenReturn(
                 StockStoryEntity.builder()
+                        .userId(userId)
                         .storyId(storyId3)
                         .story(story3)
                         .build()
@@ -282,13 +304,14 @@ public class StockStoryServiceTest {
         String story4 = "IT market is way too much hyped";
         when(stockPositionStoryRepository.findByStoryId(storyId4)).thenReturn(
                 StockStoryEntity.builder()
+                        .userId(userId)
                         .storyId(storyId4)
                         .story(story4)
                         .build()
         );
 
         // when
-        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockStoryOfCertainStock(stockCode);
+        List<StockStoryDto> stockStoryDtos = stockStoryService.readStockStoryOfCertainStock(userId, stockCode);
 
         // then
         assertThat(stockStoryDtos.size()).isEqualTo(4);
@@ -297,6 +320,7 @@ public class StockStoryServiceTest {
     @Test
     public void createStockLongPositionStory(){
         // given
+        int userId = 1;
         String stockCode = "373220";
         int[] stockPrices = new int[] { 402000, 401000, 404000 };
         LocalDate date = LocalDate.of(2023, 11, 3);
@@ -311,7 +335,7 @@ public class StockStoryServiceTest {
                 .build();
 
         //when
-        CreateStatusDto createStatusDto = stockStoryService.createLongPositionStory(stockStoryDto);
+        CreateStatusDto createStatusDto = stockStoryService.createLongPositionStory(userId, stockStoryDto);
 
         //then
         assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);
@@ -320,12 +344,14 @@ public class StockStoryServiceTest {
     @Test
     public void createStockShortPositionStory(){
         // given
+        int userId = 1;
         String stockCode = "373220";
         long storyId1 = 1;
         LocalDate stockPurchaseDate = LocalDate.of(2023, 10, 10);
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(402000)
                 .storyId(storyId1)
@@ -334,6 +360,7 @@ public class StockStoryServiceTest {
         );
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(401000)
                 .storyId(storyId1)
@@ -344,13 +371,14 @@ public class StockStoryServiceTest {
         LocalDate stockPurchaseDate2 = LocalDate.of(2023, 10, 23);
         stockPurchaseRecordEntities.add(StockPurchaseRecordEntity
                 .builder()
+                .userId(userId)
                 .stockCode(stockCode)
                 .purchasePrice(404000)
                 .storyId(storyId2)
                 .purchaseDt(stockPurchaseDate2)
                 .build()
         );
-        when(stockPurchaseRecordRepository.findAllByStockCode(stockCode)).thenReturn(stockPurchaseRecordEntities);
+        when(stockPurchaseRecordRepository.findAllByUserIdAndStockCode(userId, stockCode)).thenReturn(stockPurchaseRecordEntities);
 
         int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
         LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);
@@ -365,7 +393,7 @@ public class StockStoryServiceTest {
                 .build();
 
         //when
-        CreateStatusDto createStatusDto = stockStoryService.createShortPositionStory(stockShortPositionStoryDto);
+        CreateStatusDto createStatusDto = stockStoryService.createShortPositionStory(userId, stockShortPositionStoryDto);
 
         //then
         assertThat(createStatusDto.getStatus()).isEqualTo(CreateStatusDto.Status.SUCCESS);

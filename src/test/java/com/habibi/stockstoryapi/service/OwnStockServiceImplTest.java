@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -33,15 +34,16 @@ public class OwnStockServiceImplTest {
     @Test
     public void returnEmptyListWhenNoOwnStock(){
         // given
+        int userId = 1;
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
-        when(stockPurchaseRecordRepository.findAll())
+        when(stockPurchaseRecordRepository.findAllByUserId(userId))
                 .thenReturn(stockPurchaseRecordEntities);
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
-        when(stockSellRecordRepository.findAll())
+        when(stockSellRecordRepository.findAllByUserId(userId))
                 .thenReturn(stockSellRecordEntities);
 
         // when
-        List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks();
+        List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks(userId);
 
         // then
         assertThat(ownStockDtos).isNotNull();
@@ -51,11 +53,13 @@ public class OwnStockServiceImplTest {
     @Test
     public void ownStockResultAccuracy(){
         // given
+        int userId = 1;
         String stockCode1 = "000660";
         String stockCode2 = "066570";
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 8))
                         .stockCode(stockCode1)
                         .purchasePrice(45000)
@@ -63,6 +67,7 @@ public class OwnStockServiceImplTest {
         );
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 9))
                         .stockCode(stockCode2)
                         .purchasePrice(65000)
@@ -70,6 +75,7 @@ public class OwnStockServiceImplTest {
         );
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 10))
                         .stockCode(stockCode1)
                         .purchasePrice(52000)
@@ -77,6 +83,7 @@ public class OwnStockServiceImplTest {
         );
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 11))
                         .stockCode(stockCode2)
                         .purchasePrice(67000)
@@ -84,17 +91,19 @@ public class OwnStockServiceImplTest {
         );
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 13))
                         .stockCode(stockCode2)
                         .purchasePrice(70000)
                         .build()
         );
-        when(stockPurchaseRecordRepository.findAll())
+        when(stockPurchaseRecordRepository.findAllByUserId(userId))
                 .thenReturn(stockPurchaseRecordEntities);
 
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,13))
                         .stockCode(stockCode1)
                         .avgPurchasePrice((45000+52000)/2)
@@ -103,18 +112,19 @@ public class OwnStockServiceImplTest {
         );
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,14))
                         .stockCode(stockCode2)
                         .avgPurchasePrice((65000+67000+70000)/3)
                         .sellPrice(68000)
                         .build()
         );
-        when(stockSellRecordRepository.findAll())
+        when(stockSellRecordRepository.findAllByUserId(userId))
                 .thenReturn(stockSellRecordEntities);
 
 
         // when
-        List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks();
+        List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocks(userId);
 
         // expected
         assertThat(ownStockDtos.size()).isEqualTo(2);
@@ -136,6 +146,7 @@ public class OwnStockServiceImplTest {
     @Test
     public void ownStocksAtSomePointAccuracy(){
         // given
+        int userId = 1;
         String stockCode1 = "000660";
         String stockCode2 = "066570";
         LocalDate date = LocalDate.of(2023, 10, 13);
@@ -143,6 +154,7 @@ public class OwnStockServiceImplTest {
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 8))
                         .stockCode(stockCode1)
                         .purchasePrice(45000)
@@ -150,6 +162,7 @@ public class OwnStockServiceImplTest {
         );
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 9))
                         .stockCode(stockCode2)
                         .purchasePrice(65000)
@@ -157,6 +170,7 @@ public class OwnStockServiceImplTest {
         );
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 10))
                         .stockCode(stockCode1)
                         .purchasePrice(52000)
@@ -164,28 +178,30 @@ public class OwnStockServiceImplTest {
         );
         stockPurchaseRecordEntities.add(
                 StockPurchaseRecordEntity.builder()
+                        .userId(userId)
                         .purchaseDt(LocalDate.of(2023, 10, 11))
                         .stockCode(stockCode2)
                         .purchasePrice(67000)
                         .build()
         );
-        when(stockPurchaseRecordRepository.findAllByPurchaseDtIsBefore(any(LocalDate.class)))
+        when(stockPurchaseRecordRepository.findAllByUserIdAndPurchaseDtIsBefore(eq(userId), any(LocalDate.class)))
                 .thenReturn(stockPurchaseRecordEntities);
 
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,9))
                         .stockCode(stockCode1)
                         .sellPrice(30000)
                         .avgPurchasePrice(45000)
                         .build()
         );
-        when(stockSellRecordRepository.findAllBySellDtIsBefore(any(LocalDate.class)))
+        when(stockSellRecordRepository.findAllByUserIdAndSellDtIsBefore(eq(userId), any(LocalDate.class)))
                 .thenReturn(stockSellRecordEntities);
 
         // when
-        List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocksAtSomePoint(date);
+        List<OwnStockDto> ownStockDtos = ownStockService.readOwnStocksAtSomePoint(userId, date);
 
         // then
         assertThat(ownStockDtos.size()).isEqualTo(2);

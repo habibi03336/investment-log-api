@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,18 +36,23 @@ public class StockRecordServiceTest {
     @Test
     public void returnEmptyListWhenNoStockRecord(){
         //given
+        int userId = 1;
         List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = new ArrayList<>();
-        when(stockPurchaseRecordRepository.findAllByPurchaseDtIsBetween(any(LocalDate.class), any(LocalDate.class)))
+        when(stockPurchaseRecordRepository.findAllByUserIdAndPurchaseDtIsBetween(eq(userId), any(LocalDate.class), any(LocalDate.class)))
                 .thenReturn(stockPurchaseRecordEntities);
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
-        when(stockSellRecordRepository.findAllBySellDtIsBetween(any(LocalDate.class), any(LocalDate.class)))
+        when(stockSellRecordRepository.findAllByUserIdAndSellDtIsBetween(eq(userId), any(LocalDate.class), any(LocalDate.class)))
                 .thenReturn(stockSellRecordEntities);
 
         // when
         List<StockRecordDto> stockPurchaseRecordDtos = stockRecordService.readStockPurchaseRecordsBetweenPeriods(
-                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31));
+                userId,
+                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31)
+        );
         List<StockRecordDto> stockSellRecordDtos = stockRecordService.readStockSellRecordsBetweenPeriods(
-                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31));
+                userId,
+                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31)
+        );
 
         // then
         assertThat(stockPurchaseRecordDtos).isNotNull();

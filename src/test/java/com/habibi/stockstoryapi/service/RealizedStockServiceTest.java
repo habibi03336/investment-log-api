@@ -31,12 +31,13 @@ public class RealizedStockServiceTest {
     @Test
     public void returnEmptyListWhenNoRealizedStock(){
         //given
+        int userId = 1;
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
-        when(stockSellRecordRepository.findAll())
+        when(stockSellRecordRepository.findAllByUserId(userId))
                 .thenReturn(stockSellRecordEntities);
 
         // when
-        List<RealizedStockDto> realizedStockDtos = realizedStockService.readRealizedStocks();
+        List<RealizedStockDto> realizedStockDtos = realizedStockService.readRealizedStocks(userId);
 
         // then
         assertThat(realizedStockDtos).isNotNull();
@@ -46,11 +47,13 @@ public class RealizedStockServiceTest {
     @Test
     public void realizedStocksResultAccuracy(){
         //given
+        int userId = 1;
         String stockCode1 = "035420";
         String stockCode2 = "035720";
         List<StockSellRecordEntity> stockSellRecordEntities = new ArrayList<>();
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,6))
                         .stockCode(stockCode1)
                         .sellPrice(65000)
@@ -59,6 +62,7 @@ public class RealizedStockServiceTest {
         );
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,13))
                         .stockCode(stockCode1)
                         .sellPrice(80000)
@@ -67,6 +71,7 @@ public class RealizedStockServiceTest {
         );
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,20))
                         .stockCode(stockCode1)
                         .sellPrice(35000)
@@ -75,6 +80,7 @@ public class RealizedStockServiceTest {
         );
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,20))
                         .stockCode(stockCode2)
                         .sellPrice(39050)
@@ -83,17 +89,18 @@ public class RealizedStockServiceTest {
         );
         stockSellRecordEntities.add(
                 StockSellRecordEntity.builder()
+                        .userId(userId)
                         .sellDt(LocalDate.of(2023,10,23))
                         .stockCode(stockCode2)
                         .sellPrice(38750)
                         .avgPurchasePrice(112000)
                         .build()
         );
-        when(stockSellRecordRepository.findAll())
+        when(stockSellRecordRepository.findAllByUserId(userId))
                 .thenReturn(stockSellRecordEntities);
 
         // when
-        List<RealizedStockDto> realizedStockDtos = realizedStockService.readRealizedStocks();
+        List<RealizedStockDto> realizedStockDtos = realizedStockService.readRealizedStocks(userId);
 
         // then
         assertThat(realizedStockDtos.size()).isEqualTo(2);
