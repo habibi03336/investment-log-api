@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface StockSellRecordRepository extends JpaRepository<StockSellRecordEntity, Long> {
-
-    List<StockSellRecordEntity> findAllByStockCode(String stockCode);
-    List<StockSellRecordEntity> findAllByStoryId(long storyId);
-    List<StockSellRecordEntity> findAllBySellDtIsBefore(LocalDate date);
-    List<StockSellRecordEntity> findAllBySellDtIsBetween(LocalDate start, LocalDate end);
+    List<StockSellRecordEntity> findAllByUserId(int userid);
+    List<StockSellRecordEntity> findAllByUserIdAndStockCode(int userid, String stockCode);
+    List<StockSellRecordEntity> findAllByUserIdAndStoryId(int userid, long storyId);
+    List<StockSellRecordEntity> findAllByUserIdAndSellDtIsBefore(int userid, LocalDate date);
+    List<StockSellRecordEntity> findAllByUserIdAndSellDtIsBetween(int userid, LocalDate start, LocalDate end);
 }
