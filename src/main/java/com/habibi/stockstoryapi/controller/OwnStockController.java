@@ -1,11 +1,13 @@
 package com.habibi.stockstoryapi.controller;
 
 import com.habibi.stockstoryapi.dto.OwnStockDto;
+import com.habibi.stockstoryapi.dto.UserDetailsDto;
 import com.habibi.stockstoryapi.service.OwnStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,16 +30,24 @@ public class OwnStockController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OwnStockDto>> readOwnStocks(){
+    public ResponseEntity<List<OwnStockDto>> readOwnStocks(@AuthenticationPrincipal UserDetailsDto userDetails){
         return ResponseEntity
             .ok()
-            .body(ownStockService.readOwnStocks());
+            .body(ownStockService.readOwnStocks(userDetails.getUserId()));
     }
 
     @GetMapping(params = { "at" })
-    public ResponseEntity readOwnStocksAtSomePoint(@RequestParam("at") String date){
+    public ResponseEntity readOwnStocksAtSomePoint(
+            @RequestParam("at") String date,
+            @AuthenticationPrincipal UserDetailsDto userDetails
+    ){
         int[] tokens = Arrays.stream(date.split("-")).mapToInt(Integer::parseInt).toArray();
         return ResponseEntity.ok()
-                .body(ownStockService.readOwnStocksAtSomePoint(LocalDate.of(tokens[0], tokens[1], tokens[2])));
+                .body(ownStockService
+                        .readOwnStocksAtSomePoint(
+                                userDetails.getUserId(),
+                                LocalDate.of(tokens[0], tokens[1], tokens[2])
+                        )
+                );
     }
 }
