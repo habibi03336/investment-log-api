@@ -1,6 +1,6 @@
 package com.habibi.stockstoryapi;
 
-import com.fasterxml.jackson.core.JsonParser;
+import com.habibi.stockstoryapi.dto.UserDetailsDto;
 import com.jayway.jsonpath.JsonPath;
 import jakarta.transaction.Transactional;
 import org.hamcrest.CoreMatchers;
@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,9 +36,11 @@ class StockStoryApiApplicationTests {
 	@Transactional
 	public void 주식구매이야기등록후조회API테스트() throws Exception {
 		// 주식 구매 이야기 등록
+		UserDetailsDto userDetails = new UserDetailsDto(1, "habibi@example.com", "123456");
 		ResultActions responseOfPost = mockMvc.perform(
 				MockMvcRequestBuilders
 						.post("/api/stock-story")
+						.with(user(userDetails))
 						.contentType("application/json")
 						.content("""
 							{
@@ -47,6 +51,7 @@ class StockStoryApiApplicationTests {
 							  "story": "첫 주식 이야기 등록"
 							}
 						""")
+
 		);
 		responseOfPost.andExpect(MockMvcResultMatchers.status().isCreated());
 		String createdStoryId = JsonPath.parse(
@@ -57,6 +62,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfStoryById = mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/stock-story/" + createdStoryId)
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -71,6 +77,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfOwnStock = mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/own-stock")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -84,6 +91,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfOwnStockAt0101 = mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/own-stock?at=2024-01-01")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -96,6 +104,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfOwnStockAt1231 = mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/own-stock?at=2023-12-31")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -105,6 +114,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfStockStoryOfCertainStock = mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/stock-story?stock-code=066570")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -120,6 +130,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfAllPurchaseRecordOnPeriod= mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/stock-purchase-record?start-period=2022-12-31&end-period=2023-12-31")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -140,10 +151,12 @@ class StockStoryApiApplicationTests {
 	@WithMockUser(authorities = {"USER"})
 	@Transactional
 	public void 주식판매이야기등록후조회API테스트() throws Exception {
+		UserDetailsDto userDetails = new UserDetailsDto(1, "habibi@example.com", "123456");
 		// 주식 구매 이야기 등록
 		ResultActions responseOfCreateLongStory = mockMvc.perform(
 				MockMvcRequestBuilders
 						.post("/api/stock-story")
+						.with(user(userDetails))
 						.contentType("application/json")
 						.content("""
 							{
@@ -161,6 +174,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfCreateShortStory = mockMvc.perform(
 				MockMvcRequestBuilders
 						.post("/api/stock-story")
+						.with(user(userDetails))
 						.contentType("application/json")
 						.content("""
 							{
@@ -178,6 +192,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfOwnStock = mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/own-stock")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -190,6 +205,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfRealizedStock = mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/realized-stock")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
@@ -204,6 +220,7 @@ class StockStoryApiApplicationTests {
 		ResultActions responseOfAllPurchaseRecordOnPeriod= mockMvc.perform(
 				MockMvcRequestBuilders
 						.get("/api/stock-sell-record?start-period=2024-01-01&end-period=2024-01-03")
+						.with(user(userDetails))
 						.contentType("application/json")
 		);
 
