@@ -18,8 +18,8 @@ public class RealizedStockServiceImpl implements RealizedStockService {
         this.stockCodeToNameMapper = stockCodeToNameMapper;
     }
     @Override
-    public List<RealizedStockDto> readRealizedStocks() {
-        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAll();
+    public List<RealizedStockDto> readRealizedStocks(int userId) {
+        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByUserId(userId);
         Map<String, long[]> totalPurchasePriceAndTotalSellPriceAndCountByStockCode = new HashMap<>();
         for(StockSellRecordEntity stockSellRecordEntity : stockSellRecordEntities){
             if(totalPurchasePriceAndTotalSellPriceAndCountByStockCode.containsKey(stockSellRecordEntity.getStockCode())){

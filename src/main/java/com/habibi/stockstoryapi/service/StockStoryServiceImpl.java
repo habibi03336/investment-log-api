@@ -32,22 +32,23 @@ public class StockStoryServiceImpl implements StockStoryService {
     }
 
     @Override
-    public CreateStatusDto createStockStory(StockStoryDto stockStoryDto) {
+    public CreateStatusDto createStockStory(int userId, StockStoryDto stockStoryDto) {
         if(stockStoryDto.isLong()){
-            return createLongPositionStory(stockStoryDto);
+            return createLongPositionStory(userId, stockStoryDto);
         } else {
-            return createShortPositionStory(stockStoryDto);
+            return createShortPositionStory(userId, stockStoryDto);
         }
     }
 
     @Override
-    public CreateStatusDto createLongPositionStory(StockStoryDto stockStoryDto) {
+    public CreateStatusDto createLongPositionStory(int userId, StockStoryDto stockStoryDto) {
         String stockCode = stockStoryDto.getStockCode();
         int[] stockPrices = stockStoryDto.getStockPrices();
         LocalDate date = stockStoryDto.getDt();
         String story = stockStoryDto.getStory();
         StockStoryEntity stockStoryEntity = StockStoryEntity
                 .builder()
+                .userId(userId)
                 .positionType("Long")
                 .story(story)
                 .build();
@@ -56,6 +57,7 @@ public class StockStoryServiceImpl implements StockStoryService {
         for(int price : stockPrices){
             StockPurchaseRecordEntity stockPurchaseRecordEntity = StockPurchaseRecordEntity
                     .builder()
+                    .userId(userId)
                     .storyId(storyId)
                     .stockCode(stockCode)
                     .purchaseDt(date)
@@ -70,20 +72,21 @@ public class StockStoryServiceImpl implements StockStoryService {
     }
 
     @Override
-    public CreateStatusDto createShortPositionStory(StockStoryDto stockStoryDto) {
+    public CreateStatusDto createShortPositionStory(int userId, StockStoryDto stockStoryDto) {
         String stockCode = stockStoryDto.getStockCode();
         int[] stockPrices = stockStoryDto.getStockPrices();
         LocalDate date = stockStoryDto.getDt();
         String story = stockStoryDto.getStory();
         StockStoryEntity stockStoryEntity = StockStoryEntity
                 .builder()
+                .userId(userId)
                 .positionType("Short")
                 .story(story)
                 .build();
         stockPositionStoryRepository.save(stockStoryEntity);
         Long storyId = stockStoryEntity.getStoryId();
-        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByStockCode(stockCode);
-        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByStockCode(stockCode);
+        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByUserIdAndStockCode(userId, stockCode);
+        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByUserIdAndStockCode(userId, stockCode);
         long[] countAndTotalPrices = new long[]{0, 0};
         for(StockPurchaseRecordEntity stockPurchaseRecordEntity: stockPurchaseRecordEntities){
             countAndTotalPrices[0] += 1;
@@ -97,6 +100,7 @@ public class StockStoryServiceImpl implements StockStoryService {
         for(int price : stockPrices){
             StockSellRecordEntity stockSellRecordEntity = StockSellRecordEntity
                     .builder()
+                    .userId(userId)
                     .storyId(storyId)
                     .stockCode(stockCode)
                     .sellDt(date)
@@ -146,9 +150,9 @@ public class StockStoryServiceImpl implements StockStoryService {
 
 
     @Override
-    public List<StockStoryDto> readStockLongPositionStoryOfCertainStock(String stockCode) {
+    public List<StockStoryDto> readStockLongPositionStoryOfCertainStock(int userId, String stockCode) {
         String stockName = stockCodeToNameMapper.getStockName(stockCode);
-        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByStockCode(stockCode);
+        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByUserIdAndStockCode(userId, stockCode);
         Map<Long, List<StockPurchaseRecordEntity>> stockPurchaseRecordEntitiesByStoryId = new HashMap<>();
         for(StockPurchaseRecordEntity stockPurchaseRecordEntity : stockPurchaseRecordEntities){
             long storyId = stockPurchaseRecordEntity.getStoryId();
@@ -187,9 +191,9 @@ public class StockStoryServiceImpl implements StockStoryService {
     }
 
     @Override
-    public List<StockStoryDto> readStockShortPositionStoryOfCertainStock(String stockCode) {
+    public List<StockStoryDto> readStockShortPositionStoryOfCertainStock(int userId, String stockCode) {
         String stockName = stockCodeToNameMapper.getStockName(stockCode);
-        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByStockCode(stockCode);
+        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByUserIdAndStockCode(userId, stockCode);
         Map<Long, List<StockSellRecordEntity>> stockSellRecordEntitiesByStoryId = new HashMap<>();
         for(StockSellRecordEntity stockSellRecordEntity : stockSellRecordEntities){
             long storyId = stockSellRecordEntity.getStoryId();
@@ -238,10 +242,10 @@ public class StockStoryServiceImpl implements StockStoryService {
     }
 
     @Override
-    public List<StockStoryDto> readStockStoryOfCertainStock(String stockCode){
+    public List<StockStoryDto> readStockStoryOfCertainStock(int userId, String stockCode){
         List<StockStoryDto> stories = Stream.concat(
-                readStockShortPositionStoryOfCertainStock(stockCode).stream(),
-                readStockLongPositionStoryOfCertainStock(stockCode).stream()
+                readStockShortPositionStoryOfCertainStock(userId, stockCode).stream(),
+                readStockLongPositionStoryOfCertainStock(userId, stockCode).stream()
         ).collect(Collectors.toList());
         stories.sort(Comparator.comparing(StockStoryDto::getStoryId, Comparator.reverseOrder()));
         return stories;

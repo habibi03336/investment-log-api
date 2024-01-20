@@ -29,17 +29,17 @@ public class OwnStockServiceImpl implements OwnStockService {
     }
 
     @Override
-    public List<OwnStockDto> readOwnStocks() {
-        List<StockPurchaseRecordEntity> stockPurchaseRecords = stockPurchaseRecordRepository.findAll();
-        List<StockSellRecordEntity> stockSellRecords = stockSellRecordRepository.findAll();
+    public List<OwnStockDto> readOwnStocks(int userId) {
+        List<StockPurchaseRecordEntity> stockPurchaseRecords = stockPurchaseRecordRepository.findAllByUserId(userId);
+        List<StockSellRecordEntity> stockSellRecords = stockSellRecordRepository.findAllByUserId(userId);
         List<OwnStockDto> ownStocks = getOwnStocksByPurchaseAndSellRecords(stockPurchaseRecords, stockSellRecords);
         return ownStocks;
     }
 
     @Override
-    public List<OwnStockDto> readOwnStocksAtSomePoint(LocalDate date) {
-        List<StockPurchaseRecordEntity> stockPurchaseRecords = stockPurchaseRecordRepository.findAllByPurchaseDtIsBefore(date);
-        List<StockSellRecordEntity> stockSellRecords = stockSellRecordRepository.findAllBySellDtIsBefore(date);
+    public List<OwnStockDto> readOwnStocksAtSomePoint(int userId, LocalDate date) {
+        List<StockPurchaseRecordEntity> stockPurchaseRecords = stockPurchaseRecordRepository.findAllByUserIdAndPurchaseDtIsBefore(userId, date);
+        List<StockSellRecordEntity> stockSellRecords = stockSellRecordRepository.findAllByUserIdAndSellDtIsBefore(userId, date);
         List<OwnStockDto> ownStocks = getOwnStocksByPurchaseAndSellRecords(stockPurchaseRecords, stockSellRecords);
         return ownStocks;
     }

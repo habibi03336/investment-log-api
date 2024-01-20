@@ -25,8 +25,8 @@ public class StockRecordServiceImpl implements  StockRecordService{
         this.stockCodeToNameMapper = stockCodeToNameMapper;
     }
     @Override
-    public List<StockRecordDto> readStockPurchaseRecordsBetweenPeriods(LocalDate start, LocalDate end) {
-        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByPurchaseDtIsBetween(start, end);
+    public List<StockRecordDto> readStockPurchaseRecordsBetweenPeriods(int userId, LocalDate start, LocalDate end) {
+        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByUserIdAndPurchaseDtIsBetween(userId, start, end);
         return stockPurchaseRecordEntities.stream().map((entity) ->
                 StockRecordDto
                         .builder()
@@ -38,8 +38,8 @@ public class StockRecordServiceImpl implements  StockRecordService{
         ).collect(Collectors.toList());
     }
     @Override
-    public List<StockRecordDto> readStockSellRecordsBetweenPeriods(LocalDate start, LocalDate end) {
-        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllBySellDtIsBetween(start, end);
+    public List<StockRecordDto> readStockSellRecordsBetweenPeriods(int userId, LocalDate start, LocalDate end) {
+        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByUserIdAndSellDtIsBetween(userId, start, end);
         return stockSellRecordEntities.stream().map((entity) ->
                 StockRecordDto
                         .builder()
