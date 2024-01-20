@@ -5,5 +5,5 @@ import com.habibi.stockstoryapi.dto.RealizedStockDto;
 import java.util.List;
 
 public interface RealizedStockService {
-    List<RealizedStockDto> readRealizedStocks();
+    List<RealizedStockDto> readRealizedStocks(int userId);
 }

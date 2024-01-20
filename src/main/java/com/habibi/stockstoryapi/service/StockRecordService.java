@@ -6,6 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface StockRecordService {
-    List<StockRecordDto> readStockPurchaseRecordsBetweenPeriods(LocalDate start, LocalDate end);
-    List<StockRecordDto> readStockSellRecordsBetweenPeriods(LocalDate start, LocalDate end);
+    List<StockRecordDto> readStockPurchaseRecordsBetweenPeriods(int userId, LocalDate start, LocalDate end);
+    List<StockRecordDto> readStockSellRecordsBetweenPeriods(int userId, LocalDate start, LocalDate end);
 }
