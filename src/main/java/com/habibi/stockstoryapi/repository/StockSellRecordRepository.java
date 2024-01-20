@@ -10,7 +10,7 @@ import java.util.List;
 public interface StockSellRecordRepository extends JpaRepository<StockSellRecordEntity, Long> {
     List<StockSellRecordEntity> findAllByUserId(int userid);
     List<StockSellRecordEntity> findAllByUserIdAndStockCode(int userid, String stockCode);
-    List<StockSellRecordEntity> findAllByUserIdAndStoryId(int userid, long storyId);
+    List<StockSellRecordEntity> findAllByStoryId(long storyId);
     List<StockSellRecordEntity> findAllByUserIdAndSellDtIsBefore(int userid, LocalDate date);
     List<StockSellRecordEntity> findAllByUserIdAndSellDtIsBetween(int userid, LocalDate start, LocalDate end);
 }
