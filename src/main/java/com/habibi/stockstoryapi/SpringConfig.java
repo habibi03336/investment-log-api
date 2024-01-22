@@ -7,8 +7,10 @@ import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
 import com.habibi.stockstoryapi.repository.UserRepository;
 import com.habibi.stockstoryapi.service.*;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -34,6 +37,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 })
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableTransactionManagement
 public class SpringConfig {
     private final StockPositionStoryRepository stockPositionStoryRepository;
     private final StockPurchaseRecordRepository stockPurchaseRecordRepository;
@@ -133,4 +137,9 @@ public class SpringConfig {
         return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
     }
 
+    @Bean
+    public JpaTransactionManager transactionManager(
+            EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
 }
