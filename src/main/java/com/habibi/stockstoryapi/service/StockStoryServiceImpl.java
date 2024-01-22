@@ -8,6 +8,7 @@ import com.habibi.stockstoryapi.dto.StockStoryDto;
 import com.habibi.stockstoryapi.repository.StockPositionStoryRepository;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
 import com.habibi.stockstoryapi.repository.StockSellRecordRepository;
+import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -41,6 +42,7 @@ public class StockStoryServiceImpl implements StockStoryService {
     }
 
     @Override
+    @Transactional
     public CreateStatusDto createLongPositionStory(int userId, StockStoryDto stockStoryDto) {
         String stockCode = stockStoryDto.getStockCode();
         int[] stockPrices = stockStoryDto.getStockPrices();
@@ -72,6 +74,7 @@ public class StockStoryServiceImpl implements StockStoryService {
     }
 
     @Override
+    @Transactional
     public CreateStatusDto createShortPositionStory(int userId, StockStoryDto stockStoryDto) {
         String stockCode = stockStoryDto.getStockCode();
         int[] stockPrices = stockStoryDto.getStockPrices();
