@@ -4,6 +4,7 @@ import com.habibi.stockstoryapi.domain.StockStoryEntity;
 import com.habibi.stockstoryapi.domain.StockPurchaseRecordEntity;
 import com.habibi.stockstoryapi.domain.StockSellRecordEntity;
 import com.habibi.stockstoryapi.dto.CreateStatusDto;
+import com.habibi.stockstoryapi.dto.OwnStockDto;
 import com.habibi.stockstoryapi.dto.StockStoryDto;
 import com.habibi.stockstoryapi.repository.StockPositionStoryRepository;
 import com.habibi.stockstoryapi.repository.StockPurchaseRecordRepository;
@@ -20,16 +21,19 @@ public class StockStoryServiceImpl implements StockStoryService {
     private StockSellRecordRepository stockSellRecordRepository;
     private StockPositionStoryRepository stockPositionStoryRepository;
     private StockCodeToNameMapper stockCodeToNameMapper;
+    private OwnStockService ownStockService;
     public StockStoryServiceImpl(
             StockPurchaseRecordRepository stockPurchaseRecordRepository,
             StockSellRecordRepository stockSellRecordRepository,
             StockPositionStoryRepository stockPositionStoryRepository,
-            StockCodeToNameMapper stockCodeToNameMapper
+            StockCodeToNameMapper stockCodeToNameMapper,
+            OwnStockService ownStockService
     ){
         this.stockPurchaseRecordRepository = stockPurchaseRecordRepository;
         this.stockSellRecordRepository = stockSellRecordRepository;
         this.stockPositionStoryRepository = stockPositionStoryRepository;
         this.stockCodeToNameMapper = stockCodeToNameMapper;
+        this.ownStockService = ownStockService;
     }
 
     @Override
@@ -88,18 +92,8 @@ public class StockStoryServiceImpl implements StockStoryService {
                 .build();
         stockPositionStoryRepository.save(stockStoryEntity);
         Long storyId = stockStoryEntity.getStoryId();
-        List<StockPurchaseRecordEntity> stockPurchaseRecordEntities = stockPurchaseRecordRepository.findAllByUserIdAndStockCode(userId, stockCode);
-        List<StockSellRecordEntity> stockSellRecordEntities = stockSellRecordRepository.findAllByUserIdAndStockCode(userId, stockCode);
-        long[] countAndTotalPrices = new long[]{0, 0};
-        for(StockPurchaseRecordEntity stockPurchaseRecordEntity: stockPurchaseRecordEntities){
-            countAndTotalPrices[0] += 1;
-            countAndTotalPrices[1] += stockPurchaseRecordEntity.getPurchasePrice();
-        }
-        for(StockSellRecordEntity stockSellRecordEntity: stockSellRecordEntities){
-            countAndTotalPrices[0] -= 1;
-            countAndTotalPrices[1] -= stockSellRecordEntity.getAvgPurchasePrice();
-        }
-        int averagePurchasePrice = (int)(countAndTotalPrices[1]/countAndTotalPrices[0]);
+        List<OwnStockDto> ownStocks = ownStockService.readOwnStocks(userId);
+        OwnStockDto ownStock = ownStocks.stream().filter(stock -> stock.getStockCode().equals(stockCode)).findFirst().orElseThrow();
         for(int price : stockPrices){
             StockSellRecordEntity stockSellRecordEntity = StockSellRecordEntity
                     .builder()
@@ -107,7 +101,7 @@ public class StockStoryServiceImpl implements StockStoryService {
                     .storyId(storyId)
                     .stockCode(stockCode)
                     .sellDt(date)
-                    .avgPurchasePrice(averagePurchasePrice)
+                    .avgPurchasePrice(ownStock.getAveragePurchasePrice())
                     .sellPrice(price)
                     .build();
             stockSellRecordRepository.save(stockSellRecordEntity);

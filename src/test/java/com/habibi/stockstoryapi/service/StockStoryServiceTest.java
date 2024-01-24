@@ -37,7 +37,8 @@ public class StockStoryServiceTest {
                 stockPurchaseRecordRepository,
                 stockSellRecordRepository,
                 stockPositionStoryRepository,
-                stockCodeToNameMapper
+                stockCodeToNameMapper,
+                new OwnStockServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockCodeToNameMapper)
         );
     }
     @Test
@@ -378,7 +379,7 @@ public class StockStoryServiceTest {
                 .purchaseDt(stockPurchaseDate2)
                 .build()
         );
-        when(stockPurchaseRecordRepository.findAllByUserIdAndStockCode(userId, stockCode)).thenReturn(stockPurchaseRecordEntities);
+        when(stockPurchaseRecordRepository.findAllByUserId(userId)).thenReturn(stockPurchaseRecordEntities);
 
         int[] shortPositionStockPrices = new int[] { 501000, 500000, 510000 };
         LocalDate shortPositionDate = LocalDate.of(2023, 11, 3);

@@ -115,7 +115,7 @@ public class SpringConfig {
 
     @Bean
     public StockStoryService stockStoryService() {
-        return new StockStoryServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockPositionStoryRepository, stockCodeToNameMapper());
+        return new StockStoryServiceImpl(stockPurchaseRecordRepository, stockSellRecordRepository, stockPositionStoryRepository, stockCodeToNameMapper(), ownStockService());
     }
 
     @Bean
